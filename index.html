@@ -10,8 +10,12 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&family=Cinzel:wght@600;700;800&family=Playfair+Display:ital,wght@0,600;0,700;1,600&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 
-  <!-- Google Model-Viewer for WebGL 3D Interactive Model -->
-  <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.5.0/model-viewer.min.js"></script>
+  <!-- Google Model-Viewer for WebGL 3D Interactive Model (Local bundle) -->
+  <script type="module" src="model/model-viewer.min.js"></script>
+
+  <!-- GSAP & ScrollTrigger for Scroll Animations & 3D Image Carousel (Local bundle) -->
+  <script src="gsap.min.js"></script>
+  <script src="ScrollTrigger.min.js"></script>
 
   <style>
     /* =============================================================
@@ -27,54 +31,79 @@
     }
 
     :root {
-      /* Studio Taupe & Mocha Background Palette matching Book a Table reference */
+      /* Base Neumorphic Canvas: Soothing Warm Oat Latte Tone */
+      --canvas: #ede6dc;
+      --canvas-well: #e4dbd0;
+      --canvas-card: #ede6dc;
+      --canvas-elevated: #f3ece3;
+
+      /* Neumorphic Dual Shadows (Light highlight + Warm mocha shade) */
+      --neu-light: rgba(255, 255, 255, 0.95);
+      --neu-dark: rgba(165, 142, 122, 0.42);
+      --neu-dark-soft: rgba(165, 142, 122, 0.28);
+      
+      /* Neumorphic Surface Elevation */
+      --neu-raised: 8px 8px 22px var(--neu-dark), -8px -8px 22px var(--neu-light);
+      --neu-raised-sm: 4px 4px 10px var(--neu-dark), -4px -4px 10px var(--neu-light);
+      --neu-raised-lg: 14px 14px 34px var(--neu-dark), -14px -14px 34px var(--neu-light);
+      --neu-inset: inset 3px 3px 7px var(--neu-dark), inset -3px -3px 7px var(--neu-light);
+      --neu-inset-sm: inset 2px 2px 4px var(--neu-dark), inset -2px -2px 4px var(--neu-light);
+
+      /* Neumorphic Tactile Typography (Sculpted Letterpress / Embossed) */
+      --neu-text-heading: -1px -1px 0px rgba(255, 255, 255, 0.95), 1px 1px 1px rgba(255, 255, 255, 0.4), 2px 3px 5px rgba(50, 26, 12, 0.22);
+      --neu-text-accent: -1px -1px 0px rgba(255, 255, 255, 0.9), 1px 2px 4px rgba(65, 34, 15, 0.18);
+      --neu-text-body: 0 1px 0 rgba(255, 255, 255, 0.85);
+
+      /* Studio Taupe & Mocha Background Palette */
       --bg-studio-light: #9e8166;
       --bg-studio: #95775d;
       --bg-studio-dark: #88674d;
       --bg-dark: #8c6f54;
       --bg-surface: #95775d;
       
-      /* Handmade Clay Parchment Paper Palette */
-      --parchment-base: #fbf5ee;
-      --parchment-gradient: linear-gradient(170deg, #fbf6f0 0%, #faede0 100%);
-      --bg-card: #fbf5ee;
-      --bg-glass: rgba(251, 245, 238, 0.92);
-      --bg-glass-active: rgba(250, 237, 224, 0.98);
+      /* Card & Parchment */
+      --parchment-base: #ede6dc;
+      --parchment-gradient: #ede6dc;
+      --bg-card: #ede6dc;
+      --bg-glass: rgba(237, 230, 220, 0.92);
+      --bg-glass-active: rgba(243, 236, 227, 0.98);
 
-      /* Typography & Accents matching Book a Table reference */
-      --espresso: #241308;
-      --espresso-dark: #190c05;
-      --espresso-heading: #241308;
-      --cinnamon: #553621;
-      --cinnamon-muted: #4a2e1b;
+      /* High-Contrast Readable Typography */
+      --espresso: #1a0f07;
+      --espresso-dark: #120904;
+      --espresso-heading: #1a0f07;
+      --cinnamon: #4a2c16;
+      --cinnamon-muted: #3d2311;
       --cream-text: #fff9f3;
       --cream-sub: #faede0;
       
-      --text-main: #241308;
-      --text-muted: #4a2e1b;
-      --text-dim: #5c3b24;
+      --text-main: #1a0f07;
+      --text-body: #382112;
+      --text-muted: #4e321e;
+      --text-dim: #66462e;
+      --text-accent: #784824;
 
       /* Cocoa Button & Accent Palette */
-      --amber: #845532;
-      --amber-light: #9c6c44;
-      --amber-glow: rgba(116, 70, 38, 0.35);
-      --cocoa: #845532;
-      --cocoa-dark: #744626;
-      --cocoa-light: #9c6c44;
-      --btn-cocoa: linear-gradient(135deg, #845532 0%, #744626 100%);
-      --btn-cocoa-hover: linear-gradient(135deg, #915e38 0%, #7d4d29 100%);
+      --amber: #784824;
+      --amber-light: #8f582e;
+      --amber-glow: rgba(120, 72, 36, 0.35);
+      --cocoa: #784824;
+      --cocoa-dark: #633816;
+      --cocoa-light: #8f582e;
+      --btn-cocoa: linear-gradient(135deg, #784824 0%, #633816 100%);
+      --btn-cocoa-hover: linear-gradient(135deg, #88532b 0%, #6f3f1a 100%);
 
       /* Botanical Greenery & Florals */
-      --botanical-green: #58853f;
-      --botanical-dark: #3d6029;
-      --botanical-gold: #f5b838;
+      --botanical-green: #3d6829;
+      --botanical-dark: #2c4d1d;
+      --botanical-gold: #c27f2c;
       --terracotta: #a8583b;
-      --sage: #58853f;
+      --sage: #3d6829;
 
-      /* Clay Parchment Borders & Shadows */
-      --border-subtle: rgba(220, 195, 170, 0.65);
-      --border-bright: rgba(180, 145, 115, 0.85);
-      --card-shadow: 0 20px 50px rgba(50, 32, 18, 0.22), 0 2px 0 rgba(255, 255, 255, 0.8) inset;
+      /* Borders & Shadows */
+      --border-subtle: rgba(255, 255, 255, 0.75);
+      --border-bright: rgba(255, 255, 255, 0.9);
+      --card-shadow: 8px 8px 22px var(--neu-dark), -8px -8px 22px var(--neu-light);
 
       --radius-sm: 8px;
       --radius-md: 16px;
@@ -100,9 +129,7 @@
     html {
       width: 100%;
       min-height: 100%;
-      background-color: #95775d;
-      background: radial-gradient(circle at 60% 40%, #9e8166 0%, #95775d 48%, #88674d 100%);
-      background-attachment: fixed;
+      background-color: var(--canvas);
       color: var(--text-main);
       font-family: var(--font-body);
       font-size: 16px;
@@ -113,7 +140,7 @@
       width: 100%;
       min-height: 100dvh;
       overflow-x: hidden;
-      background-color: transparent;
+      background-color: var(--canvas);
       color: var(--text-main);
       font-family: var(--font-body);
       line-height: 1.5;
@@ -485,24 +512,27 @@
       font-size: clamp(2.35rem, 6vw, 3.85rem);
       line-height: 1.12;
       font-weight: 800;
-      color: #241308;
+      color: #1a0f07;
+      text-shadow: var(--neu-text-heading);
       letter-spacing: -0.02em;
       margin-bottom: 18px;
     }
 
     .hero-title-italic {
       font-style: italic;
-      color: #845532;
+      color: #784824;
+      text-shadow: var(--neu-text-accent);
       position: relative;
     }
 
     .hero-desc {
       font-size: clamp(0.95rem, 2.2vw, 1.1rem);
       line-height: 1.68;
-      color: #4a2e1b;
+      color: #382112;
       margin-bottom: 28px;
-      font-weight: 500;
+      font-weight: 550;
       max-width: 540px;
+      text-shadow: var(--neu-text-body);
     }
 
     .hero-cta-group {
@@ -515,7 +545,7 @@
     }
 
     .hero-btn-primary {
-      background: linear-gradient(135deg, #845532 0%, #6e4120 100%);
+      background: var(--btn-cocoa);
       color: #fff9f3 !important;
       font-size: 0.94rem;
       font-weight: 700;
@@ -525,16 +555,21 @@
       align-items: center;
       justify-content: center;
       gap: 8px;
-      box-shadow: 0 8px 24px rgba(110, 65, 32, 0.35);
+      box-shadow: 6px 6px 16px var(--neu-dark), -4px -4px 12px var(--neu-light);
+      border: 1px solid rgba(255, 255, 255, 0.25);
       transition: var(--transition);
       text-decoration: none;
       cursor: pointer;
     }
     .hero-btn-primary:hover {
-      background: linear-gradient(135deg, #946039 0%, #7d4924 100%);
+      background: var(--btn-cocoa-hover);
       transform: translateY(-2px);
-      box-shadow: 0 12px 28px rgba(110, 65, 32, 0.45);
+      box-shadow: 8px 8px 20px var(--neu-dark), -6px -6px 16px var(--neu-light);
       color: #ffffff !important;
+    }
+    .hero-btn-primary:active {
+      transform: translateY(0);
+      box-shadow: inset 3px 3px 6px rgba(25, 12, 5, 0.5), inset -2px -2px 5px rgba(255, 255, 255, 0.2);
     }
     .hero-btn-primary .btn-arrow {
       width: 18px;
@@ -551,9 +586,9 @@
     }
 
     .hero-btn-secondary {
-      background: rgba(255, 255, 255, 0.9);
-      border: 1px solid rgba(200, 170, 140, 0.6);
-      color: #241308 !important;
+      background: var(--canvas);
+      border: 1px solid rgba(255, 255, 255, 0.85);
+      color: #1a0f07 !important;
       font-size: 0.94rem;
       font-weight: 700;
       padding: 12px 24px;
@@ -562,17 +597,20 @@
       align-items: center;
       justify-content: center;
       gap: 8px;
-      box-shadow: 0 4px 14px rgba(60, 36, 18, 0.06);
+      box-shadow: var(--neu-raised-sm);
       transition: var(--transition);
       text-decoration: none;
       cursor: pointer;
     }
     .hero-btn-secondary:hover {
-      background: #ffffff;
-      border-color: #845532;
-      color: #845532 !important;
+      background: var(--canvas-elevated);
+      color: #784824 !important;
       transform: translateY(-2px);
-      box-shadow: 0 6px 18px rgba(60, 36, 18, 0.12);
+      box-shadow: 6px 6px 14px var(--neu-dark), -6px -6px 14px var(--neu-light);
+    }
+    .hero-btn-secondary:active {
+      transform: translateY(0);
+      box-shadow: var(--neu-inset-sm);
     }
     .hero-btn-secondary svg {
       width: 18px;
@@ -897,133 +935,162 @@
        5. CONTENT SECTIONS (UNIFIED BOOK-A-TABLE PARCHMENT THEME)
        ============================================================= */
     .mobile-section {
-      padding: 60px 0;
-      border-bottom: 1px solid rgba(132, 85, 50, 0.15);
+      padding: 65px 0;
       position: relative;
+      z-index: 2;
     }
 
-    #philosophy {
+    #philosophy,
+    #menu,
+    #ambiance,
+    #reservations,
+    #visit {
+      background: transparent;
       position: relative;
-      background: radial-gradient(circle at 60% 40%, #9e8166 0%, #95775d 48%, #88674d 100%);
+      z-index: 2;
     }
 
     .section-badge {
       display: inline-flex;
       align-items: center;
       gap: 6px;
-      color: #241308;
-      background: #fbf5ee;
-      border: 1px solid rgba(220, 195, 170, 0.85);
-      padding: 4px 14px;
+      color: #1a0f07;
+      background: var(--canvas);
+      border: 1px solid rgba(255, 255, 255, 0.85);
+      padding: 6px 16px;
       border-radius: var(--radius-pill);
       font-size: 0.72rem;
       letter-spacing: 0.14em;
       text-transform: uppercase;
       font-weight: 800;
       margin-bottom: 12px;
-      box-shadow: 0 2px 8px rgba(60, 38, 20, 0.12);
+      box-shadow: 3px 3px 8px var(--neu-dark-soft), -3px -3px 8px var(--neu-light);
     }
     .section-badge::before {
       content: '';
-      width: 5px;
-      height: 5px;
+      width: 6px;
+      height: 6px;
       border-radius: 50%;
-      background: #58853f; /* Botanical green */
+      background: #3d6829; /* Botanical green */
     }
 
     .section-title {
       font-family: 'Playfair Display', Georgia, serif;
-      font-size: clamp(1.8rem, 5.5vw, 2.5rem);
+      font-size: clamp(1.85rem, 5.5vw, 2.65rem);
       line-height: 1.2;
-      color: #fff9f3;
-      text-shadow: 0 2px 14px rgba(45, 26, 14, 0.45);
+      color: #1a0f07;
+      text-shadow: var(--neu-text-heading);
       margin-bottom: 14px;
-      letter-spacing: -0.01em;
-      font-weight: 700;
+      letter-spacing: -0.015em;
+      font-weight: 800;
     }
 
     .section-desc {
-      color: #faede0;
-      font-size: 0.98rem;
+      color: #382112;
+      font-size: 1rem;
       line-height: 1.65;
       margin-bottom: 30px;
-      font-weight: 500;
-      text-shadow: 0 1px 6px rgba(45, 26, 14, 0.3);
+      font-weight: 550;
+      text-shadow: var(--neu-text-body);
     }
 
     /* Mobile 2x2 Craft Grid */
     .mobile-craft-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 14px;
+      gap: 16px;
       margin-bottom: 30px;
     }
 
     .craft-card {
-      background: linear-gradient(170deg, #fbf6f0 0%, #faede0 100%);
-      border: 1px solid rgba(220, 195, 170, 0.65);
-      border-radius: 24px;
-      padding: 22px 16px;
+      background: var(--canvas);
+      border: 1px solid rgba(255, 255, 255, 0.85);
+      border-radius: 26px;
+      padding: 22px 18px;
       display: flex;
       flex-direction: column;
       gap: 12px;
-      box-shadow: 0 16px 36px rgba(50, 32, 18, 0.14), 0 2px 0 rgba(255, 255, 255, 0.8) inset;
+      box-shadow: 8px 8px 22px var(--neu-dark), -8px -8px 22px var(--neu-light), inset 1px 1px 0 rgba(255, 255, 255, 0.8);
       transition: transform 0.28s ease, box-shadow 0.28s ease;
+      overflow: hidden;
     }
     .craft-card:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 20px 42px rgba(50, 32, 18, 0.22);
+      transform: translateY(-4px);
+      box-shadow: 12px 12px 28px var(--neu-dark), -12px -12px 28px var(--neu-light);
+    }
+
+    .craft-card-img {
+      width: 100%;
+      height: 110px;
+      border-radius: 16px;
+      overflow: hidden;
+      border: 1px solid rgba(255, 255, 255, 0.8);
+      box-shadow: inset 1px 1px 3px rgba(0,0,0,0.15), 0 3px 8px rgba(60, 36, 18, 0.1);
+      flex-shrink: 0;
+    }
+    .craft-card-img img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: transform 0.4s ease;
+    }
+    .craft-card:hover .craft-card-img img {
+      transform: scale(1.06);
     }
 
     .craft-icon {
       width: 42px;
       height: 42px;
       border-radius: 12px;
-      background: linear-gradient(135deg, #845532 0%, #744626 100%);
-      border: 1px solid rgba(220, 195, 170, 0.7);
+      background: var(--btn-cocoa);
+      border: 1px solid rgba(255, 255, 255, 0.4);
       display: grid;
       place-items: center;
-      box-shadow: 0 4px 12px rgba(116, 70, 38, 0.25);
+      box-shadow: 4px 4px 10px var(--neu-dark), -2px -2px 8px var(--neu-light);
     }
     .craft-icon svg { width: 20px; height: 20px; fill: #fff9f3; }
 
     .craft-card h3 {
       font-family: 'Playfair Display', Georgia, serif;
-      font-size: 1.05rem;
-      color: #241308;
-      font-weight: 700;
+      font-size: 1.08rem;
+      color: #1a0f07;
+      font-weight: 800;
+      text-shadow: -1px -1px 0 rgba(255, 255, 255, 0.9), 1px 1px 2px rgba(50, 26, 12, 0.18);
     }
     .craft-card p {
-      font-size: 0.82rem;
-      color: #4a2e1b;
-      line-height: 1.5;
-      font-weight: 500;
+      font-size: 0.84rem;
+      color: #382112;
+      line-height: 1.52;
+      font-weight: 550;
+      text-shadow: var(--neu-text-body);
     }
 
     /* Mobile Stats Ribbon */
     .stats-ribbon {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
-      gap: 10px;
-      background: linear-gradient(170deg, #fbf6f0 0%, #faede0 100%);
-      border: 1px solid rgba(220, 195, 170, 0.65);
-      border-radius: 24px;
-      padding: 22px 12px;
+      gap: 12px;
+      background: var(--canvas);
+      border: 1px solid rgba(255, 255, 255, 0.85);
+      border-radius: 26px;
+      padding: 22px 14px;
       text-align: center;
-      box-shadow: 0 16px 36px rgba(50, 32, 18, 0.14), 0 2px 0 rgba(255, 255, 255, 0.8) inset;
+      box-shadow: var(--neu-raised);
     }
     .stat-box h4 {
       font-family: 'Playfair Display', Georgia, serif;
-      font-size: 1.45rem;
-      color: #241308;
+      font-size: 1.48rem;
+      color: #1a0f07;
       font-weight: 800;
+      text-shadow: -1px -1px 0 rgba(255, 255, 255, 0.9), 1px 2px 4px rgba(50, 26, 12, 0.18);
       margin-bottom: 2px;
     }
     .stat-box p {
-      font-size: 0.68rem;
+      font-size: 0.7rem;
       text-transform: uppercase;
       letter-spacing: 0.08em;
-      color: #553621;
+      color: #4e321e;
       font-weight: 700;
     }
 
@@ -1032,63 +1099,63 @@
        ============================================================= */
     .menu-chips-scroll {
       display: flex;
-      gap: 10px;
+      gap: 12px;
       overflow-x: auto;
       scrollbar-width: none;
       -webkit-overflow-scrolling: touch;
       margin: 0 -18px 26px;
-      padding: 0 18px 6px;
+      padding: 6px 18px 10px;
     }
     .menu-chips-scroll::-webkit-scrollbar { display: none; }
 
     .menu-chip-btn {
       flex-shrink: 0;
-      background: #fbf5ee;
-      border: 1px solid rgba(220, 195, 170, 0.75);
-      color: #241308;
-      padding: 9px 18px;
+      background: var(--canvas);
+      border: 1px solid rgba(255, 255, 255, 0.85);
+      color: #1a0f07;
+      padding: 10px 20px;
       border-radius: var(--radius-pill);
       font-family: var(--font-body);
-      font-size: 0.84rem;
+      font-size: 0.86rem;
       font-weight: 700;
       cursor: pointer;
       transition: var(--transition);
       white-space: nowrap;
-      box-shadow: 0 2px 8px rgba(50, 32, 18, 0.08);
+      box-shadow: var(--neu-raised-sm);
     }
     .menu-chip-btn:hover {
-      border-color: #845532;
-      color: #241308;
+      background: var(--canvas-elevated);
+      color: #784824;
+      box-shadow: 6px 6px 14px var(--neu-dark), -6px -6px 14px var(--neu-light);
     }
     .menu-chip-btn.active {
-      background: linear-gradient(135deg, #845532 0%, #744626 100%);
+      background: var(--btn-cocoa);
       color: #fff9f3;
-      border-color: #744626;
-      box-shadow: 0 4px 14px rgba(116, 70, 38, 0.35);
+      border-color: #633816;
+      box-shadow: inset 2px 2px 5px rgba(25, 12, 5, 0.5), inset -2px -2px 5px rgba(255, 255, 255, 0.2), 3px 5px 14px rgba(99, 56, 22, 0.4);
     }
-
     /* Menu Item Mobile List */
     .mobile-menu-list {
       display: flex;
       flex-direction: column;
-      gap: 14px;
+      gap: 16px;
     }
 
     .mobile-menu-item {
-      background: linear-gradient(170deg, #fbf6f0 0%, #faede0 100%);
-      border: 1px solid rgba(220, 195, 170, 0.65);
-      border-radius: 22px;
-      padding: 18px;
+      background: var(--canvas);
+      border: 1px solid rgba(255, 255, 255, 0.85);
+      border-radius: 24px;
+      padding: 18px 20px;
       display: flex;
       justify-content: space-between;
       gap: 14px;
       align-items: center;
-      box-shadow: 0 12px 28px rgba(50, 32, 18, 0.12), 0 1px 0 rgba(255, 255, 255, 0.8) inset;
+      box-shadow: 7px 7px 18px var(--neu-dark), -7px -7px 18px var(--neu-light), inset 1px 1px 0 rgba(255, 255, 255, 0.8);
       transition: var(--transition);
     }
     .mobile-menu-item:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 16px 36px rgba(50, 32, 18, 0.18);
+      transform: translateY(-3px);
+      box-shadow: 10px 10px 24px var(--neu-dark), -10px -10px 24px var(--neu-light);
     }
 
     .item-meta {
@@ -1103,21 +1170,23 @@
     }
     .item-title {
       font-family: 'Playfair Display', Georgia, serif;
-      font-size: 1.08rem;
-      font-weight: 700;
-      color: #241308;
+      font-size: 1.12rem;
+      font-weight: 800;
+      color: #1a0f07;
+      text-shadow: -1px -1px 0 rgba(255, 255, 255, 0.9), 1px 1px 2px rgba(50, 26, 12, 0.16);
     }
     .item-price {
-      font-size: 1rem;
+      font-size: 1.05rem;
       font-weight: 800;
-      color: #552e12;
+      color: #784824;
     }
     .item-desc {
-      font-size: 0.84rem;
-      color: #4a2e1b;
-      line-height: 1.48;
+      font-size: 0.86rem;
+      color: #382112;
+      line-height: 1.5;
       margin-bottom: 8px;
-      font-weight: 500;
+      font-weight: 550;
+      text-shadow: var(--neu-text-body);
     }
     .item-tag-list {
       display: flex;
@@ -1131,72 +1200,422 @@
       padding: 3px 10px;
       border-radius: var(--radius-pill);
       font-weight: 700;
-      background: rgba(132, 85, 50, 0.12);
-      color: #3b2111;
-      border: 1px solid rgba(132, 85, 50, 0.25);
+      background: #e3d9cd;
+      color: #2c170a;
+      box-shadow: inset 1.5px 1.5px 3px var(--neu-dark-soft), inset -1.5px -1.5px 3px var(--neu-light);
+      border: 1px solid rgba(255, 255, 255, 0.5);
     }
 
     .btn-quick-add {
-      width: 40px;
-      height: 40px;
+      width: 42px;
+      height: 42px;
       border-radius: 50%;
-      background: linear-gradient(135deg, #845532 0%, #744626 100%);
-      border: none;
+      background: var(--btn-cocoa);
+      border: 1px solid rgba(255, 255, 255, 0.3);
       color: #fff9f3;
       font-size: 1.25rem;
       display: grid;
       place-items: center;
       cursor: pointer;
       flex-shrink: 0;
-      box-shadow: 0 4px 12px rgba(116, 70, 38, 0.3);
+      box-shadow: 4px 4px 10px var(--neu-dark), -2px -2px 8px var(--neu-light);
       transition: var(--transition);
     }
     .btn-quick-add:hover {
-      transform: scale(1.06);
-      background: linear-gradient(135deg, #915e38 0%, #7d4d29 100%);
+      transform: scale(1.08);
+      background: var(--btn-cocoa-hover);
+      box-shadow: 6px 6px 14px var(--neu-dark), -4px -4px 10px var(--neu-light);
+    }
+    .btn-quick-add:active {
+      transform: scale(0.96);
+      box-shadow: inset 2px 2px 5px rgba(25, 12, 5, 0.5), inset -2px -2px 5px rgba(255, 255, 255, 0.2);
     }
 
     /* House Special Mobile Card */
     .special-feature-card {
-      background: linear-gradient(170deg, #fbf6f0 0%, #faede0 100%);
-      border: 1px solid rgba(220, 195, 170, 0.75);
+      background: var(--canvas);
+      border: 1px solid rgba(255, 255, 255, 0.85);
       border-radius: 28px;
       padding: 26px 22px;
       margin-top: 28px;
       position: relative;
-      box-shadow: 0 20px 50px rgba(50, 32, 18, 0.22), 0 2px 0 rgba(255, 255, 255, 0.8) inset;
+      box-shadow: var(--neu-raised-lg);
     }
     .special-badge {
       display: inline-block;
-      background: #58853f; /* Botanical green */
+      background: #3d6829; /* Botanical green */
       color: #ffffff;
       font-size: 0.68rem;
       letter-spacing: 0.14em;
       text-transform: uppercase;
       font-weight: 700;
-      padding: 4px 12px;
+      padding: 5px 14px;
       border-radius: var(--radius-pill);
       margin-bottom: 10px;
-      box-shadow: 0 3px 8px rgba(88, 133, 63, 0.28);
+      box-shadow: 3px 3px 8px rgba(61, 104, 41, 0.35);
     }
     .special-feature-card h3 {
       font-family: 'Playfair Display', Georgia, serif;
-      font-size: 1.35rem;
+      font-size: 1.38rem;
       margin-bottom: 8px;
-      color: #241308;
-      font-weight: 700;
+      color: #1a0f07;
+      font-weight: 800;
+      text-shadow: -1px -1px 0 rgba(255, 255, 255, 0.9), 1px 1px 2px rgba(50, 26, 12, 0.18);
     }
     .special-feature-card p {
-      font-size: 0.9rem;
-      color: #4a2e1b;
-      line-height: 1.55;
+      font-size: 0.92rem;
+      color: #382112;
+      line-height: 1.58;
       margin-bottom: 18px;
+      font-weight: 550;
+      text-shadow: var(--neu-text-body);
+    }
+    /* Menu Item Thumbnail */
+    .item-thumb-box {
+      width: 70px;
+      height: 70px;
+      border-radius: 16px;
+      overflow: hidden;
+      flex-shrink: 0;
+      border: 1px solid rgba(220, 195, 170, 0.75);
+      box-shadow: 0 4px 12px rgba(60, 36, 18, 0.1);
+      background: #faede0;
+    }
+    .item-thumb-box img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: transform 0.35s ease;
+    }
+    .mobile-menu-item:hover .item-thumb-box img {
+      transform: scale(1.08);
+    }
+
+    /* Special Feature Card Grid with Image */
+    .special-feature-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+    }
+    @media (min-width: 680px) {
+      .special-feature-grid {
+        display: grid;
+        grid-template-columns: 240px 1fr;
+        align-items: center;
+        gap: 26px;
+      }
+    }
+    .special-feature-img-wrap {
+      width: 100%;
+      height: 190px;
+      border-radius: 20px;
+      overflow: hidden;
+      position: relative;
+      border: 1px solid rgba(220, 195, 170, 0.7);
+      box-shadow: 0 8px 24px rgba(50, 32, 18, 0.16);
+      flex-shrink: 0;
+    }
+    .special-feature-img-wrap img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: transform 0.4s ease;
+    }
+    .special-feature-card:hover .special-feature-img-wrap img {
+      transform: scale(1.05);
+    }
+
+    .btn-gold {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(135deg, #744626 0%, #522d14 100%);
+      color: #fff9f3;
+      font-family: var(--font-body);
+      font-size: 0.88rem;
+      font-weight: 700;
+      letter-spacing: 0.02em;
+      border: 1px solid rgba(255, 255, 255, 0.25);
+      border-radius: 9999px;
+      padding: 10px 22px;
+      box-shadow: 4px 4px 12px rgba(165, 142, 122, 0.45), -2px -2px 6px rgba(255, 255, 255, 0.8), inset 0 1px 0 rgba(255, 255, 255, 0.3);
+      cursor: pointer;
+      transition: all 0.22s ease;
+      text-shadow: 0 1px 2px rgba(0, 0, 0, 0.35);
+    }
+    .btn-gold:hover {
+      background: linear-gradient(135deg, #845532 0%, #5e3418 100%);
+      transform: translateY(-2px);
+      box-shadow: 6px 6px 16px rgba(165, 142, 122, 0.55), -3px -3px 8px rgba(255, 255, 255, 0.9);
+    }
+    .btn-gold:active {
+      transform: translateY(1px);
+      box-shadow: inset 2px 2px 5px rgba(0, 0, 0, 0.4);
+    }
+
+    /* =============================================================
+       GSAP 3D IMAGE CAROUSEL (VISUAL STORIES)
+       ============================================================= */
+    .carousel-3d-wrapper {
+      position: relative;
+      width: 100%;
+      margin: 10px auto 0;
+      overflow: visible;
+      user-select: none;
+      -webkit-user-select: none;
+    }
+
+    .carousel-3d-stage {
+      position: relative;
+      width: 100%;
+      height: 440px;
+      perspective: 1100px;
+      perspective-origin: 50% 48%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      touch-action: pan-y;
+      cursor: grab;
+    }
+    .carousel-3d-stage:active {
+      cursor: grabbing;
+    }
+
+    @media (min-width: 768px) {
+      .carousel-3d-stage {
+        height: 490px;
+        perspective: 1300px;
+      }
+    }
+
+    .carousel-3d-ring {
+      position: relative;
+      width: 250px;
+      height: 350px;
+      transform-style: preserve-3d;
+      will-change: transform;
+    }
+    @media (min-width: 768px) {
+      .carousel-3d-ring {
+        width: 300px;
+        height: 410px;
+      }
+    }
+
+    .carousel-3d-card {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      transform-style: preserve-3d;
+      backface-visibility: hidden;
+      border-radius: 26px;
+      cursor: pointer;
+      will-change: transform, opacity, filter;
+      transition: filter 0.35s ease, box-shadow 0.35s ease;
+    }
+
+    .carousel-3d-card .card-inner {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      border-radius: 26px;
+      overflow: hidden;
+      border: 2px solid rgba(255, 255, 255, 0.9);
+      box-shadow: 0 24px 50px rgba(50, 32, 18, 0.32), 0 2px 0 rgba(255, 255, 255, 0.8) inset;
+      background: #faede0;
+    }
+
+    .carousel-3d-card img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .carousel-3d-card.active:hover img {
+      transform: scale(1.06);
+    }
+
+    .card-glass-caption {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      padding: 24px 18px 16px;
+      background: linear-gradient(to top, rgba(30, 16, 7, 0.92) 0%, rgba(30, 16, 7, 0.65) 60%, transparent 100%);
+      color: #fff9f3;
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+    }
+    .card-glass-caption .card-category {
+      font-size: 0.65rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      font-weight: 800;
+      color: #e5b382;
+    }
+    .card-glass-caption h4 {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: #ffffff;
+      line-height: 1.25;
+    }
+    .card-glass-caption p {
+      font-size: 0.78rem;
+      color: rgba(255, 249, 243, 0.9);
+      line-height: 1.4;
       font-weight: 500;
     }
-    .special-cta-row {
+
+    /* Carousel Controls */
+    .carousel-3d-controls {
       display: flex;
-      justify-content: space-between;
       align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-top: 16px;
+      position: relative;
+      z-index: 10;
+    }
+
+    .carousel-ctrl-btn {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: var(--canvas);
+      border: 1.5px solid rgba(255, 255, 255, 0.9);
+      color: #1a0f07;
+      display: grid;
+      place-items: center;
+      cursor: pointer;
+      box-shadow: 5px 5px 12px var(--neu-dark), -5px -5px 12px var(--neu-light);
+      transition: all 0.25s ease;
+      flex-shrink: 0;
+    }
+    .carousel-ctrl-btn svg {
+      width: 22px;
+      height: 22px;
+      fill: #784824;
+      transition: transform 0.2s;
+    }
+    .carousel-ctrl-btn:hover {
+      background: var(--canvas-elevated);
+      transform: scale(1.08);
+      box-shadow: 7px 7px 16px var(--neu-dark), -7px -7px 16px var(--neu-light);
+    }
+    .carousel-ctrl-btn:active {
+      transform: scale(0.96);
+      box-shadow: inset 3px 3px 6px var(--neu-dark), inset -3px -3px 6px var(--neu-light);
+    }
+
+    .carousel-pills-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .carousel-hint-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.72rem;
+      font-weight: 700;
+      color: #1a0f07;
+      background: var(--canvas);
+      border: 1px solid rgba(255, 255, 255, 0.85);
+      border-radius: var(--radius-pill);
+      padding: 6px 14px;
+      box-shadow: 3px 3px 8px var(--neu-dark-soft), -3px -3px 8px var(--neu-light);
+    }
+    .drag-icon {
+      font-size: 0.9rem;
+      color: #784824;
+    }
+
+    .carousel-play-toggle {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.72rem;
+      font-weight: 700;
+      color: #1a0f07;
+      background: var(--canvas);
+      border: 1px solid rgba(255, 255, 255, 0.85);
+      border-radius: var(--radius-pill);
+      padding: 6px 12px;
+      cursor: pointer;
+      box-shadow: 3px 3px 8px var(--neu-dark-soft), -3px -3px 8px var(--neu-light);
+      transition: var(--transition);
+    }
+    .carousel-play-toggle:hover {
+      background: var(--canvas-elevated);
+      box-shadow: 4px 4px 10px var(--neu-dark), -4px -4px 10px var(--neu-light);
+    }
+    .carousel-play-toggle:active {
+      box-shadow: var(--neu-inset-sm);
+    }
+    .play-status-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: #3d6829;
+      box-shadow: 0 0 6px rgba(61, 104, 41, 0.6);
+    }
+    .carousel-play-toggle.paused .play-status-dot {
+      background: #c27f2c;
+      box-shadow: none;
+    }
+
+    /* Carousel Pagination Dots */
+    .carousel-dots-bar {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      margin-top: 14px;
+    }
+    .carousel-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--canvas);
+      border: 1px solid rgba(255, 255, 255, 0.4);
+      cursor: pointer;
+      box-shadow: inset 1.5px 1.5px 3px var(--neu-dark), inset -1.5px -1.5px 3px var(--neu-light);
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      padding: 0;
+    }
+    .carousel-dot.active {
+      width: 24px;
+      border-radius: 99px;
+      background: var(--btn-cocoa);
+      border-color: #633816;
+      box-shadow: 2px 2px 6px rgba(120, 72, 36, 0.45), -1px -1px 3px rgba(255, 255, 255, 0.7);
+    }
+
+    /* Reviewer Avatar Header */
+    .reviewer-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+    .reviewer-avatar {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 2px solid #845532;
+      box-shadow: 0 4px 10px rgba(60, 36, 18, 0.15);
+      flex-shrink: 0;
     }
 
     /* =============================================================
@@ -1206,8 +1625,7 @@
        7. BOOK A TABLE (AUTHENTIC 3D MINIATURE REFERENCE DESIGN)
        ============================================================= */
     #reservations {
-      /* Studio tan/taupe background exactly matching reference image and cafe.mp4 */
-      background: radial-gradient(circle at 70% 50%, #9e8166 0%, #95775d 45%, #88674d 100%);
+      background: transparent;
       color: var(--text-main);
       position: relative;
       overflow: hidden;
@@ -1282,12 +1700,11 @@
     /* Tactile Handmade Paper Card */
     .ref-booking-card {
       position: relative;
-      background: #fbf5ee;
-      background: linear-gradient(170deg, #fbf6f0 0%, #faede0 100%);
+      background: var(--canvas);
       border-radius: 34px;
       padding: 34px 28px 28px;
-      box-shadow: 0 25px 60px rgba(50, 32, 18, 0.32), 0 2px 0 rgba(255, 255, 255, 0.8) inset;
-      border: 1px solid rgba(220, 195, 170, 0.6);
+      box-shadow: 12px 12px 32px var(--neu-dark), -12px -12px 32px var(--neu-light), inset 1px 1px 0 rgba(255, 255, 255, 0.85);
+      border: 1.5px solid rgba(255, 255, 255, 0.85);
       z-index: 2;
     }
 
@@ -1307,8 +1724,9 @@
       font-family: 'Playfair Display', Georgia, serif;
       font-size: 2.35rem;
       line-height: 1.05;
-      color: #241308;
-      font-weight: 700;
+      color: #1a0f07;
+      font-weight: 800;
+      text-shadow: var(--neu-text-heading);
       letter-spacing: -0.01em;
     }
 
@@ -1318,7 +1736,8 @@
       display: block;
       font-weight: 700;
       line-height: 0.95;
-      color: #241308;
+      color: #784824;
+      text-shadow: var(--neu-text-accent);
     }
 
     .ref-table-word {
@@ -1345,11 +1764,12 @@
 
     .ref-subtitle {
       font-family: var(--font-body);
-      font-size: 0.92rem;
-      color: #4a2e1b;
+      font-size: 0.94rem;
+      color: #382112;
       line-height: 1.45;
       margin-top: 10px;
-      font-weight: 600;
+      font-weight: 550;
+      text-shadow: var(--neu-text-body);
     }
 
     .ref-heart {
@@ -1368,27 +1788,27 @@
     .ref-input-pill {
       display: flex;
       align-items: center;
-      background: #ffffff;
-      border-radius: 18px;
-      padding: 10px 16px;
-      box-shadow: 0 2px 6px rgba(100, 70, 45, 0.05), inset 0 1px 2px rgba(0, 0, 0, 0.04);
-      border: 1px solid rgba(190, 160, 130, 0.35);
+      background: var(--canvas-well);
+      border-radius: 20px;
+      padding: 11px 18px;
+      box-shadow: inset 3px 3px 7px var(--neu-dark), inset -3px -3px 7px var(--neu-light);
+      border: 1px solid rgba(200, 180, 160, 0.45);
       transition: border-color 0.25s ease, box-shadow 0.25s ease;
       position: relative;
     }
 
     .ref-input-pill:focus-within {
-      border-color: #825432;
-      box-shadow: 0 3px 12px rgba(130, 84, 50, 0.16);
+      border-color: #784824;
+      box-shadow: inset 3px 3px 7px var(--neu-dark), inset -3px -3px 7px var(--neu-light), 0 0 0 2px rgba(120, 72, 36, 0.22);
     }
 
     .ref-field-icon {
       width: 20px;
       height: 20px;
-      fill: #825432;
+      fill: #784824;
       flex-shrink: 0;
       margin-right: 12px;
-      opacity: 0.85;
+      opacity: 0.9;
     }
 
     .ref-field {
@@ -1397,8 +1817,8 @@
       background: transparent;
       font-family: var(--font-body);
       font-size: 0.88rem;
-      color: #241308;
-      font-weight: 600;
+      color: #1a0f07;
+      font-weight: 700;
       outline: none;
       cursor: pointer;
       appearance: none;
@@ -1407,54 +1827,54 @@
     }
 
     .ref-field option {
-      background: #fbf5ee;
-      color: #241308;
-      font-weight: 600;
-      padding: 6px;
+      background: var(--canvas);
+      color: #1a0f07;
+      font-weight: 700;
+      padding: 8px;
     }
 
     .ref-field::placeholder {
-      color: #6d4e38;
-      font-weight: 500;
+      color: #66462e;
+      font-weight: 550;
     }
 
     .ref-chevron {
-      color: #825432;
+      color: #784824;
       font-size: 0.85rem;
       margin-left: 8px;
       pointer-events: none;
-      opacity: 0.7;
+      opacity: 0.8;
     }
 
     /* Guest details companion row */
     .ref-companion-row {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 10px;
+      gap: 12px;
       margin-bottom: 18px;
     }
 
     .ref-mini-input {
       width: 100%;
-      background: rgba(255, 255, 255, 0.9);
-      border: 1px solid rgba(190, 160, 130, 0.35);
-      border-radius: 14px;
-      padding: 9px 12px;
-      font-size: 0.82rem;
-      color: #241308;
+      background: var(--canvas-well);
+      border: 1px solid rgba(200, 180, 160, 0.45);
+      border-radius: 16px;
+      padding: 10px 14px;
+      font-size: 0.84rem;
+      color: #1a0f07;
       font-family: var(--font-body);
-      font-weight: 600;
+      font-weight: 700;
       outline: none;
+      box-shadow: inset 2.5px 2.5px 6px var(--neu-dark), inset -2.5px -2.5px 6px var(--neu-light);
       transition: all 0.25s;
     }
     .ref-mini-input:focus {
-      border-color: #825432;
-      background: #ffffff;
-      box-shadow: 0 2px 8px rgba(130, 84, 50, 0.12);
+      border-color: #784824;
+      box-shadow: inset 2.5px 2.5px 6px var(--neu-dark), inset -2.5px -2.5px 6px var(--neu-light), 0 0 0 2px rgba(120, 72, 36, 0.22);
     }
     .ref-mini-input::placeholder {
-      color: #6d4e38;
-      font-weight: 500;
+      color: #66462e;
+      font-weight: 550;
     }
 
     /* Button Wrap & Hand-Drawn Doodle Arrow */
@@ -1464,34 +1884,34 @@
 
     .ref-book-btn {
       width: 100%;
-      background: #7d502f;
-      background: linear-gradient(135deg, #845532 0%, #744626 100%);
+      background: var(--btn-cocoa);
       color: #fff9f3;
-      border: none;
-      border-radius: 18px;
-      padding: 13px 24px;
+      border: 1px solid rgba(255, 255, 255, 0.25);
+      border-radius: 20px;
+      padding: 14px 26px;
       font-family: var(--font-body);
-      font-size: 0.96rem;
-      font-weight: 700;
+      font-size: 0.98rem;
+      font-weight: 800;
       letter-spacing: 0.02em;
       display: flex;
       align-items: center;
       justify-content: center;
       gap: 8px;
       cursor: pointer;
-      box-shadow: 0 8px 22px rgba(116, 70, 38, 0.38);
+      box-shadow: 6px 6px 16px var(--neu-dark), -4px -4px 12px var(--neu-light);
       transition: transform 0.25s ease, box-shadow 0.25s ease, background 0.25s ease;
       text-decoration: none;
     }
 
     .ref-book-btn:hover {
-      background: linear-gradient(135deg, #915e38 0%, #7d4d29 100%);
+      background: var(--btn-cocoa-hover);
       transform: translateY(-2px);
-      box-shadow: 0 12px 28px rgba(116, 70, 38, 0.52);
+      box-shadow: 8px 8px 20px var(--neu-dark), -6px -6px 16px var(--neu-light);
     }
 
     .ref-book-btn:active {
       transform: translateY(0);
+      box-shadow: inset 3px 3px 6px rgba(25, 12, 5, 0.5), inset -2px -2px 5px rgba(255, 255, 255, 0.2);
     }
 
     .ref-book-btn .btn-arrow {
@@ -1525,10 +1945,10 @@
       width: 100%;
       max-width: 680px;
       position: relative;
-      border-radius: 30px;
-      background: radial-gradient(circle at 50% 50%, rgba(255, 248, 238, 0.5) 0%, rgba(132, 85, 50, 0.15) 100%);
-      border: 1.5px solid rgba(220, 195, 170, 0.85);
-      box-shadow: 0 24px 60px rgba(50, 32, 18, 0.16), inset 0 1px 0 rgba(255, 255, 255, 0.9);
+      border-radius: 34px;
+      background: var(--canvas);
+      border: 1.5px solid rgba(255, 255, 255, 0.85);
+      box-shadow: 12px 12px 32px var(--neu-dark), -12px -12px 32px var(--neu-light), inset 1px 1px 0 rgba(255, 255, 255, 0.85);
       overflow: hidden;
       display: flex;
       flex-direction: column;
@@ -1551,7 +1971,6 @@
       --poster-color: transparent;
       outline: none;
       cursor: grab;
-      touch-action: pan-y;
     }
     model-viewer:active {
       cursor: grabbing;
@@ -1559,12 +1978,44 @@
 
     .model-loading-bar {
       position: absolute;
-      bottom: 24px;
+      top: 50%;
       left: 50%;
-      transform: translateX(-50%);
-      width: 160px;
+      transform: translate(-50%, -50%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+      background: rgba(251, 245, 238, 0.95);
+      border: 1px solid rgba(220, 195, 170, 0.9);
+      box-shadow: 0 10px 30px rgba(50, 32, 18, 0.15);
+      padding: 12px 20px;
+      border-radius: var(--radius-card);
+      z-index: 20;
+      transition: opacity 0.4s ease, visibility 0.4s ease;
+      pointer-events: none;
+    }
+    .model-loading-bar.hide,
+    model-viewer > .model-loading-bar.hide,
+    model-viewer > [slot="progress-bar"].hide,
+    [slot="progress-bar"].hide {
+      display: none !important;
+      opacity: 0 !important;
+      visibility: hidden !important;
+      pointer-events: none !important;
+    }
+    .model-loading-text {
+      font-size: 0.76rem;
+      font-weight: 700;
+      color: #552e12;
+      letter-spacing: 0.03em;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .model-progress-track {
+      width: 130px;
       height: 4px;
-      background: rgba(60, 36, 18, 0.2);
+      background: rgba(60, 36, 18, 0.15);
       border-radius: 99px;
       overflow: hidden;
     }
@@ -1875,34 +2326,37 @@
     .review-bubble {
       flex-shrink: 0;
       width: 290px;
-      background: linear-gradient(170deg, #fbf6f0 0%, #faede0 100%);
-      border: 1px solid rgba(220, 195, 170, 0.65);
-      border-radius: 24px;
-      padding: 22px 20px;
-      box-shadow: 0 14px 32px rgba(50, 32, 18, 0.12), 0 1px 0 rgba(255, 255, 255, 0.8) inset;
+      background: var(--canvas);
+      border: 1px solid rgba(255, 255, 255, 0.85);
+      border-radius: 26px;
+      padding: 24px 22px;
+      box-shadow: 8px 8px 22px var(--neu-dark), -8px -8px 22px var(--neu-light), inset 1px 1px 0 rgba(255, 255, 255, 0.85);
     }
     .review-stars {
-      color: #c98835;
+      color: #c27f2c;
       font-size: 0.95rem;
       letter-spacing: 2px;
       margin-bottom: 10px;
     }
     .review-quote {
-      font-size: 0.9rem;
+      font-size: 0.94rem;
       line-height: 1.6;
-      color: #241308;
+      color: #1a0f07;
       margin-bottom: 16px;
       font-style: italic;
       font-family: 'Playfair Display', Georgia, serif;
+      font-weight: 600;
+      text-shadow: 0 1px 0 rgba(255, 255, 255, 0.9);
     }
     .reviewer-title {
-      font-size: 0.86rem;
+      font-size: 0.88rem;
       font-weight: 800;
-      color: #241308;
+      color: #1a0f07;
+      text-shadow: -1px -1px 0 rgba(255, 255, 255, 0.8), 1px 1px 2px rgba(50, 26, 12, 0.15);
     }
     .reviewer-sub {
-      font-size: 0.74rem;
-      color: #553621;
+      font-size: 0.76rem;
+      color: #4e321e;
       font-weight: 600;
     }
 
@@ -1910,65 +2364,71 @@
     .visit-quick-buttons {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 12px;
+      gap: 14px;
       margin-top: 20px;
     }
     .btn-action-card {
-      background: linear-gradient(170deg, #fbf6f0 0%, #faede0 100%);
-      border: 1px solid rgba(220, 195, 170, 0.65);
-      border-radius: 20px;
-      padding: 16px 14px;
+      background: var(--canvas);
+      border: 1px solid rgba(255, 255, 255, 0.85);
+      border-radius: 22px;
+      padding: 16px 16px;
       display: flex;
       align-items: center;
       gap: 12px;
-      color: #241308;
+      color: #1a0f07;
       text-decoration: none;
-      font-size: 0.88rem;
+      font-size: 0.9rem;
       font-weight: 700;
       cursor: pointer;
-      box-shadow: 0 8px 22px rgba(50, 32, 18, 0.1);
+      box-shadow: 6px 6px 16px var(--neu-dark), -6px -6px 16px var(--neu-light);
       transition: var(--transition);
     }
     .btn-action-card:hover {
       transform: translateY(-2px);
-      box-shadow: 0 12px 28px rgba(50, 32, 18, 0.18);
-      border-color: #845532;
+      box-shadow: 8px 8px 20px var(--neu-dark), -8px -8px 20px var(--neu-light);
+      background: var(--canvas-elevated);
+      color: #784824;
+    }
+    .btn-action-card:active {
+      transform: translateY(0);
+      box-shadow: var(--neu-inset-sm);
     }
     .btn-action-card svg {
       width: 22px;
       height: 22px;
-      fill: #845532;
+      fill: #784824;
       flex-shrink: 0;
     }
 
     /* Hours Sheet */
     .hours-sheet {
-      background: linear-gradient(170deg, #fbf6f0 0%, #faede0 100%);
-      border: 1px solid rgba(220, 195, 170, 0.65);
-      border-radius: 24px;
-      padding: 24px;
+      background: var(--canvas);
+      border: 1px solid rgba(255, 255, 255, 0.85);
+      border-radius: 26px;
+      padding: 26px;
       margin-top: 24px;
-      box-shadow: 0 16px 36px rgba(50, 32, 18, 0.14), 0 2px 0 rgba(255, 255, 255, 0.8) inset;
+      box-shadow: 9px 9px 24px var(--neu-dark), -9px -9px 24px var(--neu-light), inset 1px 1px 0 rgba(255, 255, 255, 0.85);
     }
     .hours-sheet h4 {
       font-family: 'Playfair Display', Georgia, serif;
-      font-size: 1.15rem;
-      color: #241308;
-      font-weight: 700;
+      font-size: 1.18rem;
+      color: #1a0f07;
+      font-weight: 800;
+      text-shadow: -1px -1px 0 rgba(255, 255, 255, 0.9), 1px 2px 4px rgba(50, 26, 12, 0.18);
       margin-bottom: 12px;
     }
     .hours-row {
       display: flex;
       justify-content: space-between;
       padding: 10px 0;
-      font-size: 0.86rem;
-      color: #4a2e1b;
-      font-weight: 500;
-      border-bottom: 1px solid rgba(132, 85, 50, 0.12);
+      font-size: 0.88rem;
+      color: #382112;
+      font-weight: 600;
+      border-bottom: 1px solid rgba(165, 142, 122, 0.25);
     }
     .hours-row:last-child { border: none; }
     .hours-row.today {
-      color: #241308;
+      color: #1a0f07;
       font-weight: 800;
     }
 
@@ -1976,12 +2436,12 @@
     .mobile-footer {
       padding: 42px 0 24px;
       text-align: center;
-      color: #fff9f3;
+      color: #3b2111;
       font-size: 0.85rem;
-      font-weight: 500;
-      border-top: 1px solid rgba(255, 255, 255, 0.22);
+      font-weight: 600;
+      border-top: 1px solid rgba(132, 85, 50, 0.2);
       margin-top: 48px;
-      text-shadow: 0 1px 4px rgba(45, 26, 14, 0.35);
+      text-shadow: 0 1px 0 rgba(255, 255, 255, 0.8);
     }
 
     /* Modal Dialog */
@@ -2081,12 +2541,12 @@
         transform: translateX(-50%);
         width: min(1220px, calc(100vw - 48px));
         padding: 10px 24px;
-        background: rgba(251, 245, 238, 0.94);
+        background: rgba(237, 230, 220, 0.94);
         backdrop-filter: blur(24px);
         -webkit-backdrop-filter: blur(24px);
-        border: 1px solid rgba(220, 195, 170, 0.8);
+        border: 1px solid rgba(255, 255, 255, 0.85);
         border-radius: 9999px;
-        box-shadow: 0 14px 40px rgba(50, 32, 18, 0.18), 0 2px 0 rgba(255, 255, 255, 0.9) inset;
+        box-shadow: 8px 8px 22px rgba(165, 142, 122, 0.35), -6px -6px 18px rgba(255, 255, 255, 0.95), 0 1px 0 rgba(255, 255, 255, 0.9) inset;
         display: flex;
         align-items: center;
         justify-content: space-between;
@@ -2102,11 +2562,11 @@
       }
 
       .brand-avatar {
-        width: 36px;
-        height: 36px;
-        background: linear-gradient(135deg, #845532 0%, #744626 100%);
-        border: 1px solid rgba(220, 195, 170, 0.8);
-        box-shadow: 0 4px 12px rgba(116, 70, 38, 0.3);
+        width: 38px;
+        height: 38px;
+        background: linear-gradient(135deg, #744626 0%, #522d14 100%);
+        border: 1px solid rgba(255, 255, 255, 0.35);
+        box-shadow: 4px 4px 10px rgba(165, 142, 122, 0.4), -2px -2px 6px rgba(255, 255, 255, 0.8);
       }
       .brand-avatar svg {
         width: 18px;
@@ -2121,10 +2581,11 @@
 
       .brand-title {
         font-family: 'Playfair Display', Georgia, serif;
-        font-size: 1.15rem;
+        font-size: 1.18rem;
         font-weight: 700;
         letter-spacing: 0.02em;
-        color: #241308;
+        color: var(--text-main);
+        text-shadow: var(--neu-text-heading);
         text-transform: none;
         line-height: 1.1;
       }
@@ -2132,8 +2593,9 @@
       .brand-tagline {
         display: block !important;
         font-family: 'Caveat', cursive, sans-serif;
-        font-size: 0.95rem;
-        color: #683b1a;
+        font-size: 0.98rem;
+        color: var(--text-accent);
+        text-shadow: -1px -1px 0px rgba(255, 255, 255, 0.9), 1px 1px 2px rgba(50, 26, 12, 0.15);
         font-weight: 700;
         line-height: 1;
         margin-top: 2px;
@@ -2143,31 +2605,34 @@
       .desktop-nav-links {
         display: flex !important;
         align-items: center;
-        gap: 24px;
+        gap: 18px;
       }
 
       .desktop-nav-link {
-        color: #241308;
+        color: var(--text-main);
         font-family: var(--font-body);
         font-size: 0.92rem;
         font-weight: 700;
         letter-spacing: 0.01em;
         text-decoration: none;
-        padding: 7px 16px;
+        padding: 8px 18px;
         border-radius: 9999px;
+        text-shadow: -1px -1px 0px rgba(255, 255, 255, 0.9), 1px 1px 1px rgba(50, 26, 12, 0.1);
         transition: all 0.22s ease;
       }
 
       .desktop-nav-link:hover {
-        color: #241308;
-        background: rgba(132, 85, 50, 0.1);
+        color: var(--text-main);
+        background: var(--canvas-well);
+        box-shadow: var(--neu-inset);
       }
 
       .desktop-nav-link.active {
         color: #fff9f3;
-        background: linear-gradient(135deg, #845532 0%, #744626 100%);
-        box-shadow: 0 4px 14px rgba(116, 70, 38, 0.32);
+        background: linear-gradient(135deg, #744626 0%, #522d14 100%);
+        box-shadow: 4px 4px 10px rgba(165, 142, 122, 0.5), -2px -2px 6px rgba(255, 255, 255, 0.8), inset 0 1px 0 rgba(255, 255, 255, 0.25);
         font-weight: 700;
+        text-shadow: 0 1px 2px rgba(0, 0, 0, 0.35);
       }
 
       .header-quick-actions {
@@ -2176,42 +2641,44 @@
 
       .icon-pill-btn {
         width: auto;
-        height: 38px;
+        height: 40px;
         border-radius: 9999px;
-        padding: 0 14px;
-        background: #ffffff;
-        border: 1px solid rgba(190, 160, 130, 0.45);
-        color: #241308;
-        box-shadow: 0 2px 8px rgba(60, 38, 20, 0.08);
+        padding: 0 16px;
+        background: var(--canvas);
+        border: 1px solid rgba(255, 255, 255, 0.85);
+        color: var(--text-main);
+        box-shadow: var(--neu-raised-sm);
         display: inline-flex;
         align-items: center;
-        gap: 7px;
+        gap: 8px;
       }
 
       .icon-pill-btn:hover {
-        border-color: #845532;
-        color: #241308;
+        border-color: rgba(255, 255, 255, 1);
+        color: var(--text-main);
         transform: translateY(-1px);
-        box-shadow: 0 4px 12px rgba(60, 38, 20, 0.14);
+        box-shadow: 5px 5px 14px var(--neu-dark), -5px -5px 14px var(--neu-light);
       }
 
       .icon-pill-btn.active {
-        background: #845532;
-        border-color: #744626;
+        background: linear-gradient(135deg, #744626 0%, #522d14 100%);
+        border-color: rgba(255, 255, 255, 0.3);
         color: #fff9f3;
+        box-shadow: 4px 4px 10px rgba(165, 142, 122, 0.5);
       }
 
       .btn-desktop-label {
         display: inline-block !important;
-        font-size: 0.82rem;
-        font-weight: 600;
+        font-size: 0.84rem;
+        font-weight: 700;
+        letter-spacing: 0.01em;
       }
 
       .desktop-reserve-cta {
         display: inline-flex !important;
         align-items: center;
         gap: 8px;
-        background: linear-gradient(135deg, #845532 0%, #744626 100%);
+        background: linear-gradient(135deg, #744626 0%, #522d14 100%);
         color: #fff9f3;
         padding: 10px 22px;
         border-radius: 9999px;
@@ -2220,14 +2687,14 @@
         font-weight: 700;
         letter-spacing: 0.02em;
         text-decoration: none;
-        box-shadow: 0 6px 18px rgba(116, 70, 38, 0.35);
+        box-shadow: 6px 6px 16px rgba(165, 142, 122, 0.5), -3px -3px 8px rgba(255, 255, 255, 0.8), inset 0 1px 0 rgba(255, 255, 255, 0.3);
         transition: transform 0.25s ease, box-shadow 0.25s ease, background 0.25s ease;
       }
 
       .desktop-reserve-cta:hover {
-        background: linear-gradient(135deg, #915e38 0%, #7d4d29 100%);
+        background: linear-gradient(135deg, #845532 0%, #5e3418 100%);
         transform: translateY(-2px);
-        box-shadow: 0 10px 24px rgba(116, 70, 38, 0.45);
+        box-shadow: 8px 8px 20px rgba(165, 142, 122, 0.6), -4px -4px 12px rgba(255, 255, 255, 0.9);
       }
 
       .desktop-reserve-cta .cta-arrow {
@@ -2247,10 +2714,10 @@
       .hero-bg-overlay {
         background: linear-gradient(
           to right,
-          rgba(251, 245, 238, 0.96) 0%,
-          rgba(251, 245, 238, 0.90) 48%,
-          rgba(251, 245, 238, 0.72) 75%,
-          rgba(242, 228, 212, 0.86) 100%
+          rgba(237, 230, 220, 0.98) 0%,
+          rgba(237, 230, 220, 0.93) 48%,
+          rgba(237, 230, 220, 0.80) 75%,
+          rgba(237, 230, 220, 0.92) 100%
         );
       }
 
@@ -2299,35 +2766,33 @@
         align-items: center;
         gap: 12px;
         margin-top: 18px;
-        background: rgba(255, 255, 255, 0.88);
-        backdrop-filter: blur(12px);
-        -webkit-backdrop-filter: blur(12px);
-        border: 1px solid rgba(220, 195, 170, 0.7);
+        background: var(--canvas);
+        border: 1px solid rgba(255, 255, 255, 0.85);
         border-radius: 18px;
-        padding: 10px 18px;
-        box-shadow: 0 8px 24px rgba(60, 36, 18, 0.08);
+        padding: 12px 20px;
+        box-shadow: var(--neu-raised-sm);
         width: 100%;
       }
 
       .quote-avatar {
         font-family: 'Playfair Display', Georgia, serif;
         font-size: 2.2rem;
-        color: #845532;
+        color: var(--text-accent);
         line-height: 1;
       }
 
       .quote-text p {
         font-family: 'Playfair Display', Georgia, serif;
         font-style: italic;
-        font-size: 0.92rem;
-        color: #241308;
+        font-size: 0.94rem;
+        color: var(--text-main);
         font-weight: 600;
         margin-bottom: 2px;
       }
 
       .quote-text span {
-        font-size: 0.74rem;
-        color: #744626;
+        font-size: 0.78rem;
+        color: var(--text-accent);
         font-weight: 700;
       }
 
@@ -2383,12 +2848,46 @@
       }
     }
 
+    /* =============================================================
+       AESTHETIC BACKGROUND FLOW PATTERN
+       ============================================================= */
+    .aesthetic-flow-canvas {
+      position: fixed;
+      top: -5%;
+      left: -5%;
+      width: 110vw;
+      height: 110vh;
+      z-index: 1;
+      pointer-events: none;
+      background: url('flow_pattern.svg') center center / cover no-repeat;
+      animation: aestheticFlowSlow 28s ease-in-out infinite alternate;
+      will-change: transform;
+      opacity: 0.95;
+    }
+
+    @keyframes aestheticFlowSlow {
+      0% {
+        transform: translate3d(0, 0, 0) scale(1);
+      }
+      50% {
+        transform: translate3d(-1.5%, 1%) scale(1.025);
+      }
+      100% {
+        transform: translate3d(1%, -1.2%) scale(1.018);
+      }
+    }
+
     @media (prefers-reduced-motion: reduce) {
       * { animation: none !important; transition: none !important; }
     }
   </style>
 </head>
 <body>
+
+  <!-- =============================================================
+       AESTHETIC BACKGROUND FLOW PATTERN LAYER
+       ============================================================= -->
+  <div class="aesthetic-flow-canvas" aria-hidden="true"></div>
 
   <!-- =============================================================
        1. TOP MOBILE HEADER
@@ -2411,6 +2910,7 @@
       <a href="#experience" class="desktop-nav-link active" data-nav="experience">Home</a>
       <a href="#philosophy" class="desktop-nav-link" data-nav="philosophy">Craft</a>
       <a href="#menu" class="desktop-nav-link" data-nav="menu">Menu</a>
+      <a href="#ambiance" class="desktop-nav-link" data-nav="ambiance">Gallery</a>
       <a href="#reservations" class="desktop-nav-link" data-nav="reservations">Book a Table</a>
       <a href="#visit" class="desktop-nav-link" data-nav="visit">Visit</a>
     </nav>
@@ -2602,6 +3102,14 @@
           <span>Pour Over</span>
         </div>
         <div class="gallery-pill">
+          <img src="https://images.unsplash.com/photo-1497636577773-f1231844b336?auto=format&fit=crop&w=120&q=80" alt="Kyoto Cold Drip">
+          <span>Cold Drip</span>
+        </div>
+        <div class="gallery-pill">
+          <img src="https://images.unsplash.com/photo-1565958011703-44f9829ba187?auto=format&fit=crop&w=120&q=80" alt="Patisserie">
+          <span>Patisserie</span>
+        </div>
+        <div class="gallery-pill">
           <img src="https://images.unsplash.com/photo-1554118811-1e0d58224f24?auto=format&fit=crop&w=120&q=80" alt="Cafe Interior">
           <span>Cozy Seating</span>
         </div>
@@ -2622,6 +3130,9 @@
 
       <div class="mobile-craft-grid">
         <div class="craft-card">
+          <div class="craft-card-img">
+            <img src="https://images.unsplash.com/photo-1447933601403-0c6688de566e?auto=format&fit=crop&w=500&q=80" alt="Direct Trade Coffee Roasting" loading="lazy">
+          </div>
           <div class="craft-icon">
             <svg viewBox="0 0 24 24"><path d="M2,21H20V19H2M20,8H18V5H20M20,3H4V13A4,4 0 0,0 8,17H14A4,4 0 0,0 18,13V10H20A2,2 0 0,0 22,8V5C22,3.89 21.1,3 20,3Z"/></svg>
           </div>
@@ -2630,6 +3141,9 @@
         </div>
 
         <div class="craft-card">
+          <div class="craft-card-img">
+            <img src="https://images.unsplash.com/photo-1498804103079-a6351b050096?auto=format&fit=crop&w=500&q=80" alt="18h Dutch Cold Drip" loading="lazy">
+          </div>
           <div class="craft-icon">
             <svg viewBox="0 0 24 24"><path d="M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2M12,4A8,8 0 0,1 20,12A8,8 0 0,1 12,20A8,8 0 0,1 4,12A8,8 0 0,1 12,4M12,6A6,6 0 0,0 6,12A6,6 0 0,0 12,18A6,6 0 0,0 18,12A6,6 0 0,0 12,6Z"/></svg>
           </div>
@@ -2638,6 +3152,9 @@
         </div>
 
         <div class="craft-card">
+          <div class="craft-card-img">
+            <img src="https://images.unsplash.com/photo-1509440159596-0249088772ff?auto=format&fit=crop&w=500&q=80" alt="Fresh French Viennoiserie" loading="lazy">
+          </div>
           <div class="craft-icon">
             <svg viewBox="0 0 24 24"><path d="M12,3L1,9L12,15L21,10.09V17H23V9M5,13.18V17.18L12,21L19,17.18V13.18L12,17L5,13.18Z"/></svg>
           </div>
@@ -2646,6 +3163,9 @@
         </div>
 
         <div class="craft-card">
+          <div class="craft-card-img">
+            <img src="https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?auto=format&fit=crop&w=500&q=80" alt="Cozy Cafe Cat Sanctuary" loading="lazy">
+          </div>
           <div class="craft-icon">
             <svg viewBox="0 0 24 24"><path d="M12,21.35L10.55,20.03C5.4,15.36 2,12.27 2,8.5C2,5.41 4.42,3 7.5,3C9.24,3 10.91,3.81 12,5.08C13.09,3.81 14.76,3 16.5,3C19.58,3 22,5.41 22,8.5C22,12.27 18.6,15.36 13.45,20.03L12,21.35Z"/></svg>
           </div>
@@ -2688,13 +3208,136 @@
 
       <!-- House Special Highlight -->
       <div class="special-feature-card">
-        <span class="special-badge">Chef's Signature</span>
-        <h3>Miniature Strawberry Chiffon & Kyoto Drip</h3>
-        <p>Japanese cloud sponge layered with summer strawberries & Madagascar cream, paired with slow cold drip.</p>
-        <div class="special-cta-row">
-          <span style="font-family: var(--font-display); font-size: 1.35rem; color: var(--amber); font-weight: 700;">$14.50</span>
-          <button class="btn-gold" style="flex: initial; padding: 8px 18px;" onclick="triggerToast('Added House Special to tasting order!')">Add to Order</button>
+        <div class="special-feature-grid">
+          <div class="special-feature-img-wrap">
+            <img src="https://images.unsplash.com/photo-1565958011703-44f9829ba187?auto=format&fit=crop&w=700&q=80" alt="Miniature Strawberry Chiffon & Kyoto Drip" loading="lazy">
+          </div>
+          <div class="special-feature-content">
+            <span class="special-badge">Chef's Signature</span>
+            <h3>Miniature Strawberry Chiffon & Kyoto Drip</h3>
+            <p>Japanese cloud sponge layered with summer strawberries & Madagascar cream, paired with slow cold drip.</p>
+            <div class="special-cta-row">
+              <span style="font-family: var(--font-display); font-size: 1.35rem; color: #241308; font-weight: 800;">$14.50</span>
+              <button class="btn-gold" style="flex: initial; padding: 10px 22px;" onclick="triggerToast('Added House Special to tasting order!')">Add to Order</button>
+            </div>
+          </div>
         </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- =============================================================
+       5.5. CAFE ATMOSPHERE 3D GSAP CAROUSEL (VISUAL STORIES)
+       ============================================================= -->
+  <section class="mobile-section" id="ambiance">
+    <div class="mobile-container">
+      <div class="section-badge">Visual Stories</div>
+      <h2 class="section-title">Moments at Le Petit Café</h2>
+      <p class="section-desc">Warm timber, slow roasts, and quiet corners brewed for slow mornings.</p>
+
+      <!-- 3D GSAP Carousel Stage -->
+      <div class="carousel-3d-wrapper" id="carousel3dWrapper">
+        <div class="carousel-3d-stage" id="carousel3dStage">
+          <div class="carousel-3d-ring" id="carouselRing">
+
+            <!-- Card 0 -->
+            <div class="carousel-3d-card" data-index="0">
+              <div class="card-inner">
+                <img src="https://images.unsplash.com/photo-1507133750040-4a8f57021571?auto=format&fit=crop&w=800&q=80" alt="Morning Sunlit Cafe Bar" loading="lazy">
+                <div class="card-glass-caption">
+                  <span class="card-category">Barista Counter</span>
+                  <h4>Morning Sunlit Bar</h4>
+                  <p>Golden hour rays over hand-carved oak and brass.</p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Card 1 -->
+            <div class="carousel-3d-card" data-index="1">
+              <div class="card-inner">
+                <img src="https://images.unsplash.com/photo-1511920170033-f8396924c348?auto=format&fit=crop&w=800&q=80" alt="Swan Latte Art" loading="lazy">
+                <div class="card-glass-caption">
+                  <span class="card-category">Artisan Pour</span>
+                  <h4>Swan Rosetta Art</h4>
+                  <p>Micro-foamed oat milk poured at 65°C perfection.</p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Card 2 -->
+            <div class="carousel-3d-card" data-index="2">
+              <div class="card-inner">
+                <img src="https://images.unsplash.com/photo-1555396273-367ea4eb4db5?auto=format&fit=crop&w=800&q=80" alt="Fresh Butter Croissants" loading="lazy">
+                <div class="card-glass-caption">
+                  <span class="card-category">Oven Warm</span>
+                  <h4>Daily Viennoiserie</h4>
+                  <p>Twenty-seven flaky buttery folds pulled at dawn.</p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Card 3 -->
+            <div class="carousel-3d-card" data-index="3">
+              <div class="card-inner">
+                <img src="https://images.unsplash.com/photo-1442512595331-e89e73853f31?auto=format&fit=crop&w=800&q=80" alt="Cozy Reading Nook" loading="lazy">
+                <div class="card-glass-caption">
+                  <span class="card-category">Sanctuary</span>
+                  <h4>Cozy Book Nook</h4>
+                  <p>Vintage poetry, rain outside, and a steaming brew.</p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Card 4 -->
+            <div class="carousel-3d-card" data-index="4">
+              <div class="card-inner">
+                <img src="https://images.unsplash.com/photo-1521017432531-fbd92d768814?auto=format&fit=crop&w=800&q=80" alt="Garden Ivy Patio" loading="lazy">
+                <div class="card-glass-caption">
+                  <span class="card-category">Outdoor Terrace</span>
+                  <h4>Garden Ivy Patio</h4>
+                  <p>Climbing jasmine vines and cobblestone afternoon light.</p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Card 5 -->
+            <div class="carousel-3d-card" data-index="5">
+              <div class="card-inner">
+                <img src="https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?auto=format&fit=crop&w=800&q=80" alt="Slow Pour Drip" loading="lazy">
+                <div class="card-glass-caption">
+                  <span class="card-category">Dutch Extraction</span>
+                  <h4>18h Drip Tower</h4>
+                  <p>Drop-by-drop cold filtration through crystal spirals.</p>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- Carousel UI Overlay Controls -->
+        <div class="carousel-3d-controls">
+          <button class="carousel-ctrl-btn prev" id="carouselPrevBtn" aria-label="Previous 3D Slide">
+            <svg viewBox="0 0 24 24"><path d="M15.41,16.58L10.83,12L15.41,7.41L14,6L8,12L14,18L15.41,16.58Z"/></svg>
+          </button>
+          
+          <div class="carousel-pills-row">
+            <span class="carousel-hint-pill">
+              <span class="drag-icon">✥</span> Drag 3D Ring • Click card to center
+            </span>
+            <button class="carousel-play-toggle" id="carouselPlayBtn" type="button">
+              <span class="play-status-dot"></span>
+              <span class="play-status-text">Auto-Spin: ON</span>
+            </button>
+          </div>
+
+          <button class="carousel-ctrl-btn next" id="carouselNextBtn" aria-label="Next 3D Slide">
+            <svg viewBox="0 0 24 24"><path d="M8.59,16.58L13.17,12L8.59,7.41L10,6L16,12L10,18L8.59,16.58Z"/></svg>
+          </button>
+        </div>
+
+        <!-- Dots Pagination -->
+        <div class="carousel-dots-bar" id="carouselDots"></div>
       </div>
     </div>
   </section>
@@ -2909,18 +3552,23 @@
               auto-rotate
               rotation-per-second="18deg"
               camera-controls
-              touch-action="pan-y"
-              shadow-intensity="1.5"
-              shadow-softness="0.8"
-              exposure="1.05"
-              camera-orbit="45deg 75deg 3.5m"
-              min-camera-orbit="auto auto 1.5m"
-              max-camera-orbit="auto auto 6m"
+              shadow-intensity="1.25"
+              shadow-softness="0.85"
+              exposure="1.0"
+              camera-orbit="30deg 75deg auto"
+              min-camera-orbit="auto auto 70%"
+              max-camera-orbit="auto auto 220%"
               loading="eager"
               reveal="auto"
             >
               <div slot="progress-bar" class="model-loading-bar">
-                <div class="model-loading-fill"></div>
+                <div class="model-loading-text">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
+                  <span>Loading 3D Café...</span>
+                </div>
+                <div class="model-progress-track">
+                  <div class="model-loading-fill"></div>
+                </div>
               </div>
             </model-viewer>
           </div>
@@ -2980,24 +3628,39 @@
       <!-- Horizontal Swipeable Review Cards -->
       <div class="mobile-reviews-wrap">
         <div class="review-bubble">
+          <div class="reviewer-header">
+            <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=120&q=80" alt="Elena Rostova" class="reviewer-avatar" loading="lazy">
+            <div>
+              <div class="reviewer-title">Elena Rostova</div>
+              <div class="reviewer-sub">The Daily Roast</div>
+            </div>
+          </div>
           <div class="review-stars">★★★★★</div>
           <p class="review-quote">"Stepping through felt like entering a Ghibli world. The pour-over is transcendent."</p>
-          <div class="reviewer-title">Elena Rostova</div>
-          <div class="reviewer-sub">The Daily Roast</div>
         </div>
 
         <div class="review-bubble">
+          <div class="reviewer-header">
+            <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=120&q=80" alt="Marcus Kim" class="reviewer-avatar" loading="lazy">
+            <div>
+              <div class="reviewer-title">Marcus Kim</div>
+              <div class="reviewer-sub">Artisan Coffee Guild</div>
+            </div>
+          </div>
           <div class="review-stars">★★★★★</div>
           <p class="review-quote">"The strawberry shortcake was feather-light, and the Ethiopian roast had peach notes."</p>
-          <div class="reviewer-title">Marcus Kim</div>
-          <div class="reviewer-sub">Artisan Coffee Guild</div>
         </div>
 
         <div class="review-bubble">
+          <div class="reviewer-header">
+            <img src="https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=120&q=80" alt="Sophia Chen" class="reviewer-avatar" loading="lazy">
+            <div>
+              <div class="reviewer-title">Sophia Chen</div>
+              <div class="reviewer-sub">Photographer</div>
+            </div>
+          </div>
           <div class="review-stars">★★★★★</div>
           <p class="review-quote">"The sleeping clay cat on the roof tiles welcomed us. My favorite cafe in the city."</p>
-          <div class="reviewer-title">Sophia Chen</div>
-          <div class="reviewer-sub">Photographer</div>
         </div>
       </div>
 
@@ -3209,25 +3872,29 @@
             name: "Velvet Flat White",
             price: "$5.80",
             desc: "Double ristretto with micro-foamed oat milk.",
-            tag: "Signature"
+            tag: "Signature",
+            img: "https://images.unsplash.com/photo-1541167760496-1628856ab772?auto=format&fit=crop&w=300&q=80"
           },
           {
             name: "Kyoto Cortado",
             price: "$5.20",
             desc: "Equal parts espresso and warm textured milk.",
-            tag: "Artisan"
+            tag: "Artisan",
+            img: "https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?auto=format&fit=crop&w=300&q=80"
           },
           {
             name: "Amber Honey Latte",
             price: "$6.50",
             desc: "Wildflower raw honey, cinnamon, steamed milk.",
-            tag: "House Special"
+            tag: "House Special",
+            img: "https://images.unsplash.com/photo-1517701604599-bb29b565090c?auto=format&fit=crop&w=300&q=80"
           },
           {
             name: "Micro-Lot Flight",
             price: "$8.00",
             desc: "Washed Ethiopian vs natural Costa Rican.",
-            tag: "Tasting Flight"
+            tag: "Tasting Flight",
+            img: "https://images.unsplash.com/photo-1511920170033-f8396924c348?auto=format&fit=crop&w=300&q=80"
           }
         ],
         pourover: [
@@ -3235,25 +3902,29 @@
             name: "Ethiopian Yirgacheffe",
             price: "$7.00",
             desc: "Jasmine blossom, bergamot, and candied peach.",
-            tag: "Single Origin"
+            tag: "Single Origin",
+            img: "https://images.unsplash.com/photo-1517256064527-09c73fc73e38?auto=format&fit=crop&w=300&q=80"
           },
           {
             name: "18h Dutch Cold Drip",
             price: "$7.50",
             desc: "Drop-by-drop extraction. Cognac cacao finish.",
-            tag: "Signature"
+            tag: "Signature",
+            img: "https://images.unsplash.com/photo-1497636577773-f1231844b336?auto=format&fit=crop&w=300&q=80"
           },
           {
             name: "Panama Geisha Lot",
             price: "$12.00",
             desc: "Lemongrass, apricot blossom, floral honey tea.",
-            tag: "Rare Lot"
+            tag: "Rare Lot",
+            img: "https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?auto=format&fit=crop&w=300&q=80"
           },
           {
             name: "Sparkling Coffee Tonic",
             price: "$6.80",
             desc: "Cold drip over craft yuzu tonic & crystal ice.",
-            tag: "Refreshing"
+            tag: "Refreshing",
+            img: "https://images.unsplash.com/photo-1461023058943-07fcbe16d735?auto=format&fit=crop&w=300&q=80"
           }
         ],
         patisserie: [
@@ -3261,25 +3932,29 @@
             name: "Petite Strawberry Shortcake",
             price: "$8.50",
             desc: "Soft sponge, summer berries, French chantilly.",
-            tag: "House Special"
+            tag: "House Special",
+            img: "https://images.unsplash.com/photo-1565958011703-44f9829ba187?auto=format&fit=crop&w=300&q=80"
           },
           {
             name: "Cardamom Cruffin",
             price: "$5.50",
             desc: "Flaky croissant pastry, cardamom sugar, custard.",
-            tag: "Fresh Baked"
+            tag: "Fresh Baked",
+            img: "https://images.unsplash.com/photo-1555507036-ab1f4038808a?auto=format&fit=crop&w=300&q=80"
           },
           {
             name: "Matcha Basque Cake",
             price: "$7.80",
             desc: "Molten ceremonial Uji matcha center.",
-            tag: "Gluten-Free"
+            tag: "Gluten-Free",
+            img: "https://images.unsplash.com/photo-1536256263959-770b48d82b0a?auto=format&fit=crop&w=300&q=80"
           },
           {
             name: "Hazelnut Tartlet",
             price: "$6.20",
             desc: "Toasted hazelnuts, Valrhona chocolate ganache.",
-            tag: "Artisan"
+            tag: "Artisan",
+            img: "https://images.unsplash.com/photo-1509440159596-0249088772ff?auto=format&fit=crop&w=300&q=80"
           }
         ],
         brunch: [
@@ -3287,25 +3962,29 @@
             name: "Avocado & Yuzu Sourdough",
             price: "$13.50",
             desc: "Poached eggs, whipped ricotta, fermented chili.",
-            tag: "Vegetarian"
+            tag: "Vegetarian",
+            img: "https://images.unsplash.com/photo-1525351484163-7529414344d8?auto=format&fit=crop&w=300&q=80"
           },
           {
             name: "Brioche French Toast",
             price: "$14.00",
             desc: "Caramelized banana, maple reduction, pecans.",
-            tag: "House Favorite"
+            tag: "House Favorite",
+            img: "https://images.unsplash.com/photo-1484723091739-30a097e8f929?auto=format&fit=crop&w=300&q=80"
           },
           {
             name: "Smoked Salmon Tartine",
             price: "$15.50",
             desc: "Cured salmon, pickled shallots, caper cream.",
-            tag: "Chef's Pick"
+            tag: "Chef's Pick",
+            img: "https://images.unsplash.com/photo-1509722747041-616f39b57569?auto=format&fit=crop&w=300&q=80"
           },
           {
             name: "Wild Mushroom Toast",
             price: "$14.50",
             desc: "Maitake, thyme butter, pecorino, poached egg.",
-            tag: "Vegetarian"
+            tag: "Vegetarian",
+            img: "https://images.unsplash.com/photo-1540420773420-3366772f4999?auto=format&fit=crop&w=300&q=80"
           }
         ]
       };
@@ -3314,6 +3993,9 @@
         const items = MENU_DATA[cat] || [];
         menuList.innerHTML = items.map(item => `
           <div class="mobile-menu-item">
+            <div class="item-thumb-box">
+              <img src="${item.img}" alt="${item.name}" loading="lazy">
+            </div>
             <div class="item-meta">
               <div class="item-title-row">
                 <span class="item-title">${item.name}</span>
@@ -3327,6 +4009,13 @@
             <button class="btn-quick-add" onclick="triggerToast('Added ${item.name}!')" title="Add to Order">+</button>
           </div>
         `).join('');
+
+        if (typeof gsap !== 'undefined') {
+          gsap.fromTo('.mobile-menu-item', 
+            { opacity: 0, y: 15 }, 
+            { opacity: 1, y: 0, stagger: 0.05, duration: 0.35, ease: 'power2.out' }
+          );
+        }
       }
 
       document.querySelectorAll('.menu-chip-btn').forEach(btn => {
@@ -3390,16 +4079,26 @@
         // Reset Camera
         if (resetCamBtn && cafe3DModel) {
           resetCamBtn.addEventListener('click', () => {
-            cafe3DModel.cameraOrbit = '45deg 75deg 3.5m';
+            cafe3DModel.cameraOrbit = '30deg 75deg auto';
             cafe3DModel.fieldOfView = 'auto';
             triggerToast('Camera view reset! ↺');
           });
         }
 
-        // Fallback if Draco model fails
+        // Fallback and loading handlers
         if (cafe3DModel) {
+          const modelLoadingBar = document.querySelector('.model-loading-bar');
+          const hideProgressBar = () => {
+            if (modelLoadingBar) {
+              modelLoadingBar.style.display = 'none';
+              modelLoadingBar.classList.add('hide');
+            }
+          };
+          cafe3DModel.addEventListener('load', hideProgressBar);
+          cafe3DModel.addEventListener('poster-dismissed', hideProgressBar);
+
           cafe3DModel.addEventListener('error', () => {
-            console.warn('Draco GLB fallback triggered');
+            console.warn('Model fallback triggered');
             cafe3DModel.src = 'model/cafe_model.glb';
           });
         }
@@ -3512,7 +4211,7 @@
       const desktopNavLinks = document.querySelectorAll('.desktop-nav-link');
 
       function updateBottomNavActive() {
-        const sections = ['experience', 'philosophy', 'menu', 'reservations', 'visit'];
+        const sections = ['experience', 'philosophy', 'menu', 'ambiance', 'reservations', 'visit'];
         const scrollY = window.scrollY;
 
         sections.forEach(id => {
@@ -3533,6 +4232,411 @@
         });
       }
 
+      /* =============================================================
+         GSAP 3D IMAGE CAROUSEL (VISUAL STORIES)
+         ============================================================= */
+      function init3DCarousel() {
+        const wrapper = document.getElementById('carousel3dWrapper');
+        const stage = document.getElementById('carousel3dStage');
+        const ring = document.getElementById('carouselRing');
+        const cards = Array.from(document.querySelectorAll('.carousel-3d-card'));
+        const prevBtn = document.getElementById('carouselPrevBtn');
+        const nextBtn = document.getElementById('carouselNextBtn');
+        const playBtn = document.getElementById('carouselPlayBtn');
+        const dotsContainer = document.getElementById('carouselDots');
+
+        if (!ring || cards.length === 0) return;
+
+        const total = cards.length;
+        const stepAngle = 360 / total; // 60 deg
+        let currentRotation = 0;
+        let targetRotation = 0;
+        let isAutoSpinning = true;
+        let autoSpinTimer = null;
+        let isPointerDown = false;
+        let startX = 0;
+        let startRotation = 0;
+        let dragDistance = 0;
+
+        function getRadius() {
+          return window.innerWidth < 768 ? 260 : 360;
+        }
+
+        // Generate pagination dots
+        if (dotsContainer) {
+          dotsContainer.innerHTML = '';
+          cards.forEach((_, idx) => {
+            const dot = document.createElement('button');
+            dot.className = 'carousel-dot' + (idx === 0 ? ' active' : '');
+            dot.setAttribute('aria-label', `Go to slide ${idx + 1}`);
+            dot.addEventListener('click', (e) => {
+              e.stopPropagation();
+              goToCard(idx);
+            });
+            dotsContainer.appendChild(dot);
+          });
+        }
+
+        // Layout cards in 3D cylindrical ring
+        function layoutRing() {
+          const radius = getRadius();
+          cards.forEach((card, i) => {
+            card.style.transform = `rotateY(${i * stepAngle}deg) translateZ(${radius}px)`;
+          });
+          updateCardDepths(currentRotation);
+        }
+
+        // Update card shading, opacity, scales and z-index according to camera angle
+        function updateCardDepths(rot) {
+          cards.forEach((card, i) => {
+            const cardAngle = (i * stepAngle + rot) % 360;
+            // Normalize to -180 to 180
+            let diff = ((cardAngle + 180) % 360 + 360) % 360 - 180;
+            const absDiff = Math.abs(diff);
+
+            // Shading factor: 1 at front (0 deg), 0 at back (180 deg)
+            const depthFactor = Math.max(0, 1 - absDiff / 180);
+
+            // Calculate subtle visual depth cues
+            const opacity = 0.32 + depthFactor * 0.68; // 0.32 back, 1.0 front
+            const brightness = 0.55 + depthFactor * 0.45; // 0.55 back, 1.0 front
+            const zIndex = Math.round(depthFactor * 100);
+
+            card.style.zIndex = zIndex;
+            card.style.filter = `brightness(${brightness})`;
+            card.style.opacity = opacity;
+
+            if (absDiff < 28) {
+              card.classList.add('active');
+            } else {
+              card.classList.remove('active');
+            }
+          });
+
+          // Update active dot
+          if (dotsContainer) {
+            const activeNorm = ((Math.round(-rot / stepAngle) % total) + total) % total;
+            const allDots = dotsContainer.querySelectorAll('.carousel-dot');
+            allDots.forEach((dot, idx) => {
+              dot.classList.toggle('active', idx === activeNorm);
+            });
+          }
+        }
+
+        // Rotate ring to specified target angle
+        function rotateTo(deg, duration = 0.85, ease = 'power2.out') {
+          targetRotation = deg;
+          gsap.to(ring, {
+            rotationY: targetRotation,
+            duration: duration,
+            ease: ease,
+            overwrite: 'auto',
+            onUpdate: () => {
+              currentRotation = gsap.getProperty(ring, 'rotationY');
+              updateCardDepths(currentRotation);
+            },
+            onComplete: () => {
+              currentRotation = targetRotation;
+              updateCardDepths(currentRotation);
+            }
+          });
+        }
+
+        // Go to specific card index by shortest path
+        function goToCard(idx) {
+          const currentNorm = ((Math.round(-targetRotation / stepAngle) % total) + total) % total;
+          let diff = idx - currentNorm;
+          if (diff > total / 2) diff -= total;
+          if (diff < -total / 2) diff += total;
+          rotateTo(targetRotation - diff * stepAngle, 0.85);
+        }
+
+        // Next & Prev actions
+        function nextSlide() {
+          rotateTo(targetRotation - stepAngle, 0.75);
+        }
+        function prevSlide() {
+          rotateTo(targetRotation + stepAngle, 0.75);
+        }
+
+        if (nextBtn) nextBtn.addEventListener('click', (e) => { e.stopPropagation(); nextSlide(); });
+        if (prevBtn) prevBtn.addEventListener('click', (e) => { e.stopPropagation(); prevSlide(); });
+
+        // Click directly on a card to bring it front and center
+        cards.forEach((card, idx) => {
+          card.addEventListener('click', (e) => {
+            if (dragDistance > 8) return;
+            goToCard(idx);
+          });
+        });
+
+        // Drag / Swipe Gestures on the stage
+        function onPointerStart(e) {
+          isPointerDown = true;
+          dragDistance = 0;
+          startX = e.clientX !== undefined ? e.clientX : (e.touches && e.touches[0].clientX) || 0;
+          startRotation = targetRotation;
+          stopAutoSpin();
+          if (stage) stage.style.cursor = 'grabbing';
+        }
+
+        function onPointerMove(e) {
+          if (!isPointerDown) return;
+          const currentX = e.clientX !== undefined ? e.clientX : (e.touches && e.touches[0].clientX) || 0;
+          const deltaX = currentX - startX;
+          dragDistance = Math.abs(deltaX);
+
+          // Drag rotation with tactile sensitivity
+          const dragRot = startRotation + deltaX * 0.38;
+          gsap.set(ring, { rotationY: dragRot });
+          currentRotation = dragRot;
+          updateCardDepths(currentRotation);
+        }
+
+        function onPointerEnd() {
+          if (!isPointerDown) return;
+          isPointerDown = false;
+          if (stage) stage.style.cursor = 'grab';
+
+          // Snap to the closest card
+          const snapped = Math.round(currentRotation / stepAngle) * stepAngle;
+          rotateTo(snapped, 0.6, 'power3.out');
+
+          if (isAutoSpinning) {
+            startAutoSpin();
+          }
+        }
+
+        if (stage) {
+          stage.addEventListener('mousedown', onPointerStart);
+          window.addEventListener('mousemove', onPointerMove);
+          window.addEventListener('mouseup', onPointerEnd);
+
+          stage.addEventListener('touchstart', onPointerStart, { passive: true });
+          window.addEventListener('touchmove', onPointerMove, { passive: true });
+          window.addEventListener('touchend', onPointerEnd, { passive: true });
+          window.addEventListener('touchcancel', onPointerEnd, { passive: true });
+        }
+
+        // Auto-spin functionality
+        function startAutoSpin() {
+          stopAutoSpin();
+          if (!isAutoSpinning) return;
+          autoSpinTimer = setInterval(() => {
+            if (!isPointerDown && isAutoSpinning) {
+              nextSlide();
+            }
+          }, 4000);
+        }
+
+        function stopAutoSpin() {
+          if (autoSpinTimer) {
+            clearInterval(autoSpinTimer);
+            autoSpinTimer = null;
+          }
+        }
+
+        if (playBtn) {
+          playBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            isAutoSpinning = !isAutoSpinning;
+            playBtn.classList.toggle('paused', !isAutoSpinning);
+            const textEl = playBtn.querySelector('.play-status-text');
+            if (textEl) textEl.textContent = isAutoSpinning ? 'Auto-Spin: ON' : 'Auto-Spin: PAUSED';
+            if (isAutoSpinning) {
+              startAutoSpin();
+              triggerToast('Auto-spin resumed ☕');
+            } else {
+              stopAutoSpin();
+              triggerToast('Auto-spin paused');
+            }
+          });
+        }
+
+        if (wrapper) {
+          wrapper.addEventListener('mouseenter', stopAutoSpin);
+          wrapper.addEventListener('mouseleave', () => {
+            if (isAutoSpinning) startAutoSpin();
+          });
+        }
+
+        // Handle viewport resize
+        window.addEventListener('resize', () => {
+          layoutRing();
+        }, { passive: true });
+
+        // Initialize layout and start auto-spin
+        layoutRing();
+        startAutoSpin();
+      }
+
+      /* =============================================================
+         GSAP SCROLLTRIGGER SCROLL-IN ENTRANCE ANIMATIONS
+         ============================================================= */
+      function initScrollAnimations() {
+        if (typeof gsap === 'undefined' || typeof ScrollTrigger === 'undefined') {
+          console.warn('GSAP or ScrollTrigger not loaded');
+          return;
+        }
+
+        gsap.registerPlugin(ScrollTrigger);
+
+        // Section Headers Entrance across all sections
+        const sections = document.querySelectorAll('.mobile-section');
+        sections.forEach(sec => {
+          const badge = sec.querySelector('.section-badge');
+          const title = sec.querySelector('.section-title');
+          const desc = sec.querySelector('.section-desc');
+          const elements = [badge, title, desc].filter(Boolean);
+
+          if (elements.length > 0) {
+            gsap.from(elements, {
+              scrollTrigger: {
+                trigger: sec,
+                start: 'top 82%',
+                toggleActions: 'play none none none'
+              },
+              y: 35,
+              opacity: 0,
+              duration: 0.85,
+              stagger: 0.12,
+              ease: 'power3.out'
+            });
+          }
+        });
+
+        // Craft cards staggered entrance
+        const craftGrid = document.querySelector('.mobile-craft-grid');
+        if (craftGrid) {
+          gsap.from('.craft-card', {
+            scrollTrigger: {
+              trigger: craftGrid,
+              start: 'top 84%',
+              toggleActions: 'play none none none'
+            },
+            y: 45,
+            opacity: 0,
+            scale: 0.94,
+            duration: 0.75,
+            stagger: 0.12,
+            ease: 'back.out(1.15)'
+          });
+        }
+
+        // Menu category chips scroll
+        const menuChips = document.querySelector('.menu-chips-scroll');
+        if (menuChips) {
+          gsap.from(menuChips, {
+            scrollTrigger: {
+              trigger: '#menu',
+              start: 'top 80%',
+              toggleActions: 'play none none none'
+            },
+            y: 25,
+            opacity: 0,
+            duration: 0.7,
+            ease: 'power2.out'
+          });
+        }
+
+        // 3D Carousel entrance: 3D perspective fold-in
+        const carouselStage = document.getElementById('carousel3dStage');
+        if (carouselStage) {
+          gsap.from(carouselStage, {
+            scrollTrigger: {
+              trigger: '#ambiance',
+              start: 'top 78%',
+              toggleActions: 'play none none none'
+            },
+            scale: 0.92,
+            opacity: 0,
+            rotationX: 18,
+            y: 50,
+            duration: 1.1,
+            ease: 'power3.out'
+          });
+        }
+
+        // Booking Section Entrance (Clay paper card & 3D Model Stage)
+        const bookingCard = document.querySelector('.ref-card-container');
+        const bookingModel = document.querySelector('.ref-model-wrap');
+        if (bookingCard && bookingModel) {
+          gsap.from(bookingCard, {
+            scrollTrigger: {
+              trigger: '#reservations',
+              start: 'top 78%',
+              toggleActions: 'play none none none'
+            },
+            x: -45,
+            opacity: 0,
+            duration: 0.95,
+            ease: 'power3.out'
+          });
+
+          gsap.from(bookingModel, {
+            scrollTrigger: {
+              trigger: '#reservations',
+              start: 'top 78%',
+              toggleActions: 'play none none none'
+            },
+            x: 45,
+            opacity: 0,
+            duration: 0.95,
+            ease: 'power3.out'
+          });
+        }
+
+        // Customer Reviews staggered pop-in
+        const reviewsWrap = document.querySelector('.mobile-reviews-wrap');
+        if (reviewsWrap) {
+          gsap.from('.review-bubble', {
+            scrollTrigger: {
+              trigger: reviewsWrap,
+              start: 'top 84%',
+              toggleActions: 'play none none none'
+            },
+            y: 40,
+            opacity: 0,
+            scale: 0.96,
+            duration: 0.75,
+            stagger: 0.14,
+            ease: 'power3.out'
+          });
+        }
+
+        // Hours sheet & action cards entrance
+        const hoursSheet = document.querySelector('.hours-sheet');
+        if (hoursSheet) {
+          gsap.from(hoursSheet, {
+            scrollTrigger: {
+              trigger: hoursSheet,
+              start: 'top 88%',
+              toggleActions: 'play none none none'
+            },
+            y: 35,
+            opacity: 0,
+            duration: 0.8,
+            ease: 'power3.out'
+          });
+        }
+
+        const visitButtons = document.querySelector('.visit-quick-buttons');
+        if (visitButtons) {
+          gsap.from('.btn-action-card', {
+            scrollTrigger: {
+              trigger: visitButtons,
+              start: 'top 90%',
+              toggleActions: 'play none none none'
+            },
+            y: 25,
+            opacity: 0,
+            duration: 0.65,
+            stagger: 0.1,
+            ease: 'power2.out'
+          });
+        }
+      }
+
       /* --- INITIALIZE --- */
       const tomorrow = new Date();
       tomorrow.setDate(tomorrow.getDate() + 1);
@@ -3547,6 +4651,8 @@
       setupBookingReferenceBehavior();
       renderMenu('espresso');
       updateBottomNavActive();
+      init3DCarousel();
+      initScrollAnimations();
 
     })();
   </script>
