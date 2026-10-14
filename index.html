@@ -1,0 +1,3577 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, viewport-fit=cover">
+  <title>Le Petit Café • Mobile-First Miniature Roastery</title>
+  
+  <!-- Preconnect & Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&family=Cinzel:wght@600;700;800&family=Playfair+Display:ital,wght@0,600;0,700;1,600&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    /* =============================================================
+       1. MOBILE-FIRST RESET & VARIABLES
+       ============================================================= */
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    :root {
+      /* Studio Taupe & Mocha Background Palette matching Book a Table reference */
+      --bg-studio-light: #9e8166;
+      --bg-studio: #95775d;
+      --bg-studio-dark: #88674d;
+      --bg-dark: #8c6f54;
+      --bg-surface: #95775d;
+      
+      /* Handmade Clay Parchment Paper Palette */
+      --parchment-base: #fbf5ee;
+      --parchment-gradient: linear-gradient(170deg, #fbf6f0 0%, #faede0 100%);
+      --bg-card: #fbf5ee;
+      --bg-glass: rgba(251, 245, 238, 0.92);
+      --bg-glass-active: rgba(250, 237, 224, 0.98);
+
+      /* Typography & Accents matching Book a Table reference */
+      --espresso: #241308;
+      --espresso-dark: #190c05;
+      --espresso-heading: #241308;
+      --cinnamon: #553621;
+      --cinnamon-muted: #4a2e1b;
+      --cream-text: #fff9f3;
+      --cream-sub: #faede0;
+      
+      --text-main: #241308;
+      --text-muted: #4a2e1b;
+      --text-dim: #5c3b24;
+
+      /* Cocoa Button & Accent Palette */
+      --amber: #845532;
+      --amber-light: #9c6c44;
+      --amber-glow: rgba(116, 70, 38, 0.35);
+      --cocoa: #845532;
+      --cocoa-dark: #744626;
+      --cocoa-light: #9c6c44;
+      --btn-cocoa: linear-gradient(135deg, #845532 0%, #744626 100%);
+      --btn-cocoa-hover: linear-gradient(135deg, #915e38 0%, #7d4d29 100%);
+
+      /* Botanical Greenery & Florals */
+      --botanical-green: #58853f;
+      --botanical-dark: #3d6029;
+      --botanical-gold: #f5b838;
+      --terracotta: #a8583b;
+      --sage: #58853f;
+
+      /* Clay Parchment Borders & Shadows */
+      --border-subtle: rgba(220, 195, 170, 0.65);
+      --border-bright: rgba(180, 145, 115, 0.85);
+      --card-shadow: 0 20px 50px rgba(50, 32, 18, 0.22), 0 2px 0 rgba(255, 255, 255, 0.8) inset;
+
+      --radius-sm: 8px;
+      --radius-md: 16px;
+      --radius-lg: 24px;
+      --radius-xl: 32px;
+      --radius-pill: 9999px;
+
+      --font-display: 'Playfair Display', Georgia, serif;
+      --font-cursive: 'Caveat', cursive, sans-serif;
+      --font-cinzel: 'Cinzel', serif, Georgia;
+      --font-body: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      --transition: all 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+
+      /* Safe area insets for iOS notches and gesture bars */
+      --sat: env(safe-area-inset-top, 0px);
+      --sab: env(safe-area-inset-bottom, 0px);
+      --sal: env(safe-area-inset-left, 0px);
+      --sar: env(safe-area-inset-right, 0px);
+      
+      --bottom-nav-height: 64px;
+    }
+
+    html {
+      width: 100%;
+      min-height: 100%;
+      background-color: #95775d;
+      background: radial-gradient(circle at 60% 40%, #9e8166 0%, #95775d 48%, #88674d 100%);
+      background-attachment: fixed;
+      color: var(--text-main);
+      font-family: var(--font-body);
+      font-size: 16px;
+      scroll-behavior: smooth;
+    }
+
+    body {
+      width: 100%;
+      min-height: 100dvh;
+      overflow-x: hidden;
+      background-color: transparent;
+      color: var(--text-main);
+      font-family: var(--font-body);
+      line-height: 1.5;
+      padding-bottom: calc(var(--bottom-nav-height) + var(--sab) + 16px);
+    }
+
+    /* Base Container */
+    .mobile-container {
+      width: 100%;
+      max-width: 540px; /* Optimal mobile reading width */
+      margin: 0 auto;
+      padding: 0 18px;
+    }
+
+    @media (min-width: 768px) {
+      .mobile-container {
+        max-width: 900px;
+        padding: 0 32px;
+      }
+    }
+
+    @media (min-width: 1024px) {
+      .mobile-container {
+        max-width: 1180px;
+      }
+    }
+
+    /* =============================================================
+       2. TOP APP BAR (MOBILE FLOATING & DESKTOP NAV BAR)
+       ============================================================= */
+    .app-header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 90;
+      padding: max(12px, var(--sat)) 16px 12px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      background: linear-gradient(180deg, rgba(149, 119, 93, 0.95) 0%, rgba(149, 119, 93, 0.6) 80%, rgba(149, 119, 93, 0) 100%);
+      pointer-events: none;
+      transition: all 0.3s ease;
+    }
+
+    .app-header > * {
+      pointer-events: auto;
+    }
+
+    .brand-pill {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: rgba(251, 245, 238, 0.94);
+      border: 1px solid rgba(220, 195, 170, 0.7);
+      border-radius: var(--radius-pill);
+      padding: 6px 14px 6px 8px;
+      box-shadow: 0 4px 16px rgba(50, 32, 18, 0.15);
+      cursor: pointer;
+      transition: var(--transition);
+    }
+    .brand-pill:hover {
+      box-shadow: 0 6px 20px rgba(50, 32, 18, 0.22);
+    }
+
+    .brand-avatar {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #845532 0%, #744626 100%);
+      border: 1px solid rgba(220, 195, 170, 0.8);
+      display: grid;
+      place-items: center;
+      box-shadow: 0 2px 8px rgba(116, 70, 38, 0.25);
+    }
+
+    .brand-avatar svg {
+      width: 15px;
+      height: 15px;
+      fill: #fff9f3;
+    }
+
+    .brand-text-col {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .brand-title {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: 0.95rem;
+      letter-spacing: 0.02em;
+      font-weight: 700;
+      color: #241308;
+      text-transform: none;
+      line-height: 1.1;
+    }
+
+    .brand-tagline {
+      display: none !important; /* Visible only on desktop */
+    }
+
+    /* Desktop Navigation Links (Hidden on Mobile) */
+    .desktop-nav-links {
+      display: none !important;
+    }
+
+    .header-quick-actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .icon-pill-btn {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: rgba(251, 245, 238, 0.94);
+      border: 1px solid rgba(220, 195, 170, 0.7);
+      color: #241308;
+      display: grid;
+      place-items: center;
+      cursor: pointer;
+      transition: var(--transition);
+      box-shadow: 0 4px 14px rgba(50, 32, 18, 0.12);
+    }
+
+    .icon-pill-btn:active {
+      transform: scale(0.92);
+      border-color: #845532;
+    }
+
+    .icon-pill-btn.active {
+      background: #845532;
+      border-color: #744626;
+      color: #fff9f3;
+      box-shadow: 0 4px 14px rgba(116, 70, 38, 0.35);
+    }
+
+    .icon-pill-btn svg {
+      width: 18px;
+      height: 18px;
+      fill: currentColor;
+    }
+
+    .btn-desktop-label {
+      display: none !important; /* Visible only on desktop */
+    }
+
+    .desktop-reserve-cta {
+      display: none !important; /* Visible only on desktop */
+    }
+
+    /* Audio wave bars */
+    .mini-wave {
+      display: flex;
+      align-items: center;
+      gap: 2px;
+      height: 12px;
+    }
+    .mini-wave span {
+      width: 2px;
+      height: 4px;
+      background: currentColor;
+      border-radius: 1px;
+    }
+    .icon-pill-btn.active .mini-wave span:nth-child(1) { animation: wave 1.2s infinite 0.1s; }
+    .icon-pill-btn.active .mini-wave span:nth-child(2) { animation: wave 1.2s infinite 0.3s; }
+    .icon-pill-btn.active .mini-wave span:nth-child(3) { animation: wave 1.2s infinite 0.2s; }
+
+    /* =============================================================
+       3. MOBILE BOTTOM NAVIGATION BAR (THUMB ZONE)
+       ============================================================= */
+    .mobile-bottom-bar {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      padding: 6px 12px calc(6px + var(--sab));
+      background: rgba(251, 245, 238, 0.96);
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
+      border-top: 1px solid rgba(220, 195, 170, 0.75);
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      box-shadow: 0 -8px 30px rgba(50, 32, 18, 0.16);
+    }
+
+    .nav-tab-btn {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 3px;
+      background: transparent;
+      border: none;
+      color: #4a2e1b;
+      font-family: var(--font-body);
+      font-size: 0.68rem;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      padding: 6px 12px;
+      border-radius: var(--radius-md);
+      cursor: pointer;
+      transition: var(--transition);
+      text-decoration: none;
+      min-width: 58px;
+      min-height: 48px; /* Touch target minimum */
+    }
+
+    .nav-tab-btn svg {
+      width: 20px;
+      height: 20px;
+      fill: currentColor;
+      transition: transform 0.2s ease;
+    }
+
+    .nav-tab-btn:active svg {
+      transform: scale(0.88);
+    }
+
+    .nav-tab-btn.active {
+      color: #241308;
+      font-weight: 700;
+    }
+
+    .nav-tab-btn.active svg {
+      transform: translateY(-1px);
+    }
+
+    .nav-tab-btn.highlight {
+      background: linear-gradient(135deg, #845532 0%, #744626 100%);
+      color: #fff9f3;
+      border-radius: var(--radius-pill);
+      padding: 6px 14px;
+      box-shadow: 0 4px 14px rgba(116, 70, 38, 0.35);
+    }
+    .nav-tab-btn.highlight.active,
+    .nav-tab-btn.highlight:active {
+      color: #fff9f3;
+    }
+
+    /* =============================================================
+       4. INTERACTIVE 3D TOUR SECTION (STICKY MOBILE VIEWPORT)
+       ============================================================= */
+    #experience {
+      position: relative;
+      width: 100%;
+      height: 420vh; /* Smooth touch-scroll distance */
+    }
+
+    .mobile-tour-viewport {
+      position: sticky;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100dvh;
+      overflow: hidden;
+      background: radial-gradient(circle at 60% 50%, #9e8166 0%, #95775d 48%, #88674d 100%);
+      z-index: 10;
+    }
+
+    #frameCanvas {
+      width: 100%;
+      height: 100%;
+      display: block;
+      object-fit: cover;
+      transform: translateZ(0);
+    }
+
+    .vignette {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      background: radial-gradient(circle at 60% 50%, transparent 40%, rgba(65, 42, 25, 0.25) 75%, rgba(45, 28, 16, 0.55) 100%);
+      mix-blend-mode: multiply;
+      z-index: 2;
+    }
+
+    /* Top Tour Progress Bar */
+    #progress-strip {
+      position: absolute;
+      top: 0;
+      left: 0;
+      height: 3px;
+      width: 0%;
+      background: linear-gradient(90deg, #845532, #d99f66, #fff9f3);
+      z-index: 95;
+      box-shadow: 0 0 10px rgba(132, 85, 50, 0.5);
+      transition: width 0.05s linear;
+    }
+
+    /* Mobile Splash Preloader */
+    #preloader {
+      position: absolute;
+      inset: 0;
+      z-index: 200;
+      background: radial-gradient(circle at center, #9e8166 0%, #95775d 45%, #88674d 100%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      transition: opacity 0.6s ease, visibility 0.6s ease;
+    }
+
+    #preloader.loaded {
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+    }
+
+    .preloader-emblem {
+      width: 64px;
+      height: 64px;
+      border: 2px solid rgba(255, 245, 235, 0.4);
+      background: rgba(251, 245, 238, 0.15);
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      margin-bottom: 20px;
+      animation: pulseGlow 2.4s infinite;
+      box-shadow: 0 4px 16px rgba(50, 32, 18, 0.25);
+    }
+    .preloader-emblem svg { width: 28px; height: 28px; fill: #fff9f3; }
+
+    .preloader-title {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: 1.8rem;
+      letter-spacing: 0.05em;
+      color: #fff9f3;
+      margin-bottom: 4px;
+      font-weight: 700;
+    }
+
+    .preloader-subtitle {
+      font-family: 'Caveat', cursive, sans-serif;
+      font-size: 1.25rem;
+      color: #faede0;
+      letter-spacing: 0.04em;
+      margin-bottom: 24px;
+      font-weight: 700;
+    }
+
+    .loader-bar-wrap {
+      width: min(280px, 75vw);
+      height: 6px;
+      background: rgba(60, 36, 18, 0.25);
+      border-radius: 99px;
+      overflow: hidden;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    .loader-bar {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, #fbf5ee, #ffffff);
+      border-radius: 99px;
+      box-shadow: 0 0 14px rgba(255, 255, 255, 0.8);
+    }
+
+    .loader-status {
+      margin-top: 14px;
+      font-size: 0.82rem;
+      color: #faede0;
+      font-weight: 500;
+    }
+
+    /* Swipe / Scroll Upward Guide */
+    #scroll-prompt {
+      position: absolute;
+      bottom: calc(var(--bottom-nav-height) + var(--sab) + 90px);
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 25;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      pointer-events: none;
+      transition: opacity 0.4s ease;
+    }
+    #scroll-prompt.hidden { opacity: 0; }
+
+    .swipe-pill {
+      background: rgba(251, 245, 238, 0.94);
+      border: 1px solid rgba(220, 195, 170, 0.8);
+      border-radius: var(--radius-pill);
+      padding: 7px 18px;
+      font-size: 0.74rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      font-weight: 700;
+      color: #241308;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      box-shadow: 0 4px 16px rgba(50, 32, 18, 0.18);
+      animation: bouncePrompt 2s infinite;
+    }
+
+    /* Story Overlay Cards (Minimal, Positioned at Top of Screen on Mobile) */
+    .story-container {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      z-index: 20;
+      display: flex;
+      align-items: flex-start; /* Positioned at the top side of screen for mobile */
+      justify-content: center;
+      padding: max(64px, calc(var(--sat) + 54px)) 16px 0;
+    }
+
+    .story-card {
+      position: absolute;
+      width: min(420px, calc(100vw - 32px));
+      padding: 14px 18px 14px;
+      background: rgba(251, 245, 238, 0.94);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid rgba(220, 195, 170, 0.75);
+      border-radius: 20px;
+      box-shadow: 0 12px 32px rgba(50, 32, 18, 0.18), inset 0 1px 0 rgba(255, 255, 255, 0.9);
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+      transform: translateY(-10px) scale(0.98);
+      transition: opacity 0.35s cubic-bezier(0.16, 1, 0.3, 1), transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.35s;
+    }
+
+    .story-card.active {
+      opacity: 1;
+      visibility: visible;
+      pointer-events: auto;
+      transform: translateY(0) scale(1);
+    }
+
+    .story-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-family: 'Caveat', cursive, sans-serif;
+      font-size: 1.05rem;
+      letter-spacing: 0.02em;
+      text-transform: none;
+      font-weight: 700;
+      color: #552e12;
+      margin-bottom: 2px;
+    }
+    .story-tag::before {
+      content: '';
+      width: 5px;
+      height: 5px;
+      border-radius: 50%;
+      background: #58853f; /* Botanical green accent */
+    }
+
+    .story-title {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: 1.15rem;
+      line-height: 1.25;
+      font-weight: 700;
+      color: #241308;
+      margin-bottom: 4px;
+    }
+
+    .story-desc {
+      font-size: 0.78rem;
+      line-height: 1.5;
+      color: #4a2e1b;
+      margin-bottom: 10px;
+      font-weight: 500;
+    }
+
+    .story-actions {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .btn-gold {
+      background: linear-gradient(135deg, #845532 0%, #744626 100%);
+      color: #fff9f3;
+      font-weight: 700;
+      font-size: 0.74rem;
+      letter-spacing: 0.02em;
+      padding: 7px 16px;
+      border-radius: var(--radius-pill);
+      border: none;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+      transition: var(--transition);
+      box-shadow: 0 4px 12px rgba(116, 70, 38, 0.3);
+      text-decoration: none;
+      min-height: 30px;
+    }
+    .btn-gold:active { transform: scale(0.96); }
+
+    .btn-outline {
+      background: #ffffff;
+      border: 1px solid rgba(190, 160, 130, 0.5);
+      color: #241308;
+      font-size: 0.74rem;
+      font-weight: 700;
+      padding: 6px 14px;
+      border-radius: var(--radius-pill);
+      cursor: pointer;
+      transition: var(--transition);
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 30px;
+      box-shadow: 0 2px 6px rgba(60, 38, 20, 0.05);
+    }
+    .btn-outline:active { background: #fbf5ee; }
+
+    /* Mobile Timeline Track (Sleek Horizontal Thumb Scrubber) */
+    .mobile-scrubber-dock {
+      position: absolute;
+      bottom: calc(var(--bottom-nav-height) + var(--sab) + 12px);
+      left: 16px;
+      right: 16px;
+      z-index: 30;
+      background: rgba(251, 245, 238, 0.94);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid rgba(220, 195, 170, 0.75);
+      border-radius: var(--radius-pill);
+      padding: 8px 14px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      max-width: 500px;
+      margin: 0 auto;
+      box-shadow: 0 6px 20px rgba(50, 32, 18, 0.16);
+    }
+
+    .timeline-chips {
+      display: flex;
+      gap: 4px;
+      overflow-x: auto;
+      scrollbar-width: none;
+      flex-shrink: 0;
+    }
+    .timeline-chips::-webkit-scrollbar { display: none; }
+
+    .chapter-chip {
+      background: transparent;
+      border: none;
+      color: #4a2e1b;
+      font-size: 0.7rem;
+      font-weight: 700;
+      padding: 4px 10px;
+      border-radius: var(--radius-pill);
+      cursor: pointer;
+      white-space: nowrap;
+      transition: var(--transition);
+    }
+    .chapter-chip.active {
+      color: #fff9f3;
+      background: linear-gradient(135deg, #845532 0%, #744626 100%);
+      box-shadow: 0 2px 8px rgba(116, 70, 38, 0.3);
+    }
+
+    .scrubber-track {
+      position: relative;
+      flex: 1;
+      height: 6px;
+      background: rgba(140, 95, 60, 0.16);
+      border-radius: 99px;
+      cursor: pointer;
+      touch-action: none;
+    }
+
+    .scrubber-fill {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, #9c6c44, #744626);
+      border-radius: 99px;
+      pointer-events: none;
+    }
+
+    .scrubber-handle {
+      position: absolute;
+      top: 50%;
+      left: 0%;
+      transform: translate(-50%, -50%);
+      width: 15px;
+      height: 15px;
+      background: #ffffff;
+      border: 2.5px solid #744626;
+      border-radius: 50%;
+      pointer-events: none;
+      box-shadow: 0 2px 6px rgba(60, 36, 18, 0.35);
+    }
+
+    .scrubber-frame-tag {
+      font-size: 0.7rem;
+      font-weight: 800;
+      color: #241308;
+      font-variant-numeric: tabular-nums;
+      flex-shrink: 0;
+      letter-spacing: 0.04em;
+    }
+
+    /* =============================================================
+       5. CONTENT SECTIONS (UNIFIED BOOK-A-TABLE PARCHMENT THEME)
+       ============================================================= */
+    .mobile-section {
+      padding: 60px 0;
+      border-bottom: 1px solid rgba(132, 85, 50, 0.15);
+      position: relative;
+    }
+
+    #philosophy {
+      position: relative;
+      background: radial-gradient(circle at 60% 40%, #9e8166 0%, #95775d 48%, #88674d 100%);
+    }
+
+    .section-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      color: #241308;
+      background: #fbf5ee;
+      border: 1px solid rgba(220, 195, 170, 0.85);
+      padding: 4px 14px;
+      border-radius: var(--radius-pill);
+      font-size: 0.72rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      font-weight: 800;
+      margin-bottom: 12px;
+      box-shadow: 0 2px 8px rgba(60, 38, 20, 0.12);
+    }
+    .section-badge::before {
+      content: '';
+      width: 5px;
+      height: 5px;
+      border-radius: 50%;
+      background: #58853f; /* Botanical green */
+    }
+
+    .section-title {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: clamp(1.8rem, 5.5vw, 2.5rem);
+      line-height: 1.2;
+      color: #fff9f3;
+      text-shadow: 0 2px 14px rgba(45, 26, 14, 0.45);
+      margin-bottom: 14px;
+      letter-spacing: -0.01em;
+      font-weight: 700;
+    }
+
+    .section-desc {
+      color: #faede0;
+      font-size: 0.98rem;
+      line-height: 1.65;
+      margin-bottom: 30px;
+      font-weight: 500;
+      text-shadow: 0 1px 6px rgba(45, 26, 14, 0.3);
+    }
+
+    /* Mobile 2x2 Craft Grid */
+    .mobile-craft-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+      margin-bottom: 30px;
+    }
+
+    .craft-card {
+      background: linear-gradient(170deg, #fbf6f0 0%, #faede0 100%);
+      border: 1px solid rgba(220, 195, 170, 0.65);
+      border-radius: 24px;
+      padding: 22px 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      box-shadow: 0 16px 36px rgba(50, 32, 18, 0.14), 0 2px 0 rgba(255, 255, 255, 0.8) inset;
+      transition: transform 0.28s ease, box-shadow 0.28s ease;
+    }
+    .craft-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 20px 42px rgba(50, 32, 18, 0.22);
+    }
+
+    .craft-icon {
+      width: 42px;
+      height: 42px;
+      border-radius: 12px;
+      background: linear-gradient(135deg, #845532 0%, #744626 100%);
+      border: 1px solid rgba(220, 195, 170, 0.7);
+      display: grid;
+      place-items: center;
+      box-shadow: 0 4px 12px rgba(116, 70, 38, 0.25);
+    }
+    .craft-icon svg { width: 20px; height: 20px; fill: #fff9f3; }
+
+    .craft-card h3 {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: 1.05rem;
+      color: #241308;
+      font-weight: 700;
+    }
+    .craft-card p {
+      font-size: 0.82rem;
+      color: #4a2e1b;
+      line-height: 1.5;
+      font-weight: 500;
+    }
+
+    /* Mobile Stats Ribbon */
+    .stats-ribbon {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+      background: linear-gradient(170deg, #fbf6f0 0%, #faede0 100%);
+      border: 1px solid rgba(220, 195, 170, 0.65);
+      border-radius: 24px;
+      padding: 22px 12px;
+      text-align: center;
+      box-shadow: 0 16px 36px rgba(50, 32, 18, 0.14), 0 2px 0 rgba(255, 255, 255, 0.8) inset;
+    }
+    .stat-box h4 {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: 1.45rem;
+      color: #241308;
+      font-weight: 800;
+      margin-bottom: 2px;
+    }
+    .stat-box p {
+      font-size: 0.68rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: #553621;
+      font-weight: 700;
+    }
+
+    /* =============================================================
+       6. MENU (SWIPEABLE CHIPS & TACTILE PARCHMENT CARDS)
+       ============================================================= */
+    .menu-chips-scroll {
+      display: flex;
+      gap: 10px;
+      overflow-x: auto;
+      scrollbar-width: none;
+      -webkit-overflow-scrolling: touch;
+      margin: 0 -18px 26px;
+      padding: 0 18px 6px;
+    }
+    .menu-chips-scroll::-webkit-scrollbar { display: none; }
+
+    .menu-chip-btn {
+      flex-shrink: 0;
+      background: #fbf5ee;
+      border: 1px solid rgba(220, 195, 170, 0.75);
+      color: #241308;
+      padding: 9px 18px;
+      border-radius: var(--radius-pill);
+      font-family: var(--font-body);
+      font-size: 0.84rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: var(--transition);
+      white-space: nowrap;
+      box-shadow: 0 2px 8px rgba(50, 32, 18, 0.08);
+    }
+    .menu-chip-btn:hover {
+      border-color: #845532;
+      color: #241308;
+    }
+    .menu-chip-btn.active {
+      background: linear-gradient(135deg, #845532 0%, #744626 100%);
+      color: #fff9f3;
+      border-color: #744626;
+      box-shadow: 0 4px 14px rgba(116, 70, 38, 0.35);
+    }
+
+    /* Menu Item Mobile List */
+    .mobile-menu-list {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .mobile-menu-item {
+      background: linear-gradient(170deg, #fbf6f0 0%, #faede0 100%);
+      border: 1px solid rgba(220, 195, 170, 0.65);
+      border-radius: 22px;
+      padding: 18px;
+      display: flex;
+      justify-content: space-between;
+      gap: 14px;
+      align-items: center;
+      box-shadow: 0 12px 28px rgba(50, 32, 18, 0.12), 0 1px 0 rgba(255, 255, 255, 0.8) inset;
+      transition: var(--transition);
+    }
+    .mobile-menu-item:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 16px 36px rgba(50, 32, 18, 0.18);
+    }
+
+    .item-meta {
+      flex: 1;
+    }
+    .item-title-row {
+      display: flex;
+      align-items: baseline;
+      gap: 10px;
+      margin-bottom: 4px;
+      flex-wrap: wrap;
+    }
+    .item-title {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: 1.08rem;
+      font-weight: 700;
+      color: #241308;
+    }
+    .item-price {
+      font-size: 1rem;
+      font-weight: 800;
+      color: #552e12;
+    }
+    .item-desc {
+      font-size: 0.84rem;
+      color: #4a2e1b;
+      line-height: 1.48;
+      margin-bottom: 8px;
+      font-weight: 500;
+    }
+    .item-tag-list {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+    .item-tag {
+      font-size: 0.65rem;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      padding: 3px 10px;
+      border-radius: var(--radius-pill);
+      font-weight: 700;
+      background: rgba(132, 85, 50, 0.12);
+      color: #3b2111;
+      border: 1px solid rgba(132, 85, 50, 0.25);
+    }
+
+    .btn-quick-add {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #845532 0%, #744626 100%);
+      border: none;
+      color: #fff9f3;
+      font-size: 1.25rem;
+      display: grid;
+      place-items: center;
+      cursor: pointer;
+      flex-shrink: 0;
+      box-shadow: 0 4px 12px rgba(116, 70, 38, 0.3);
+      transition: var(--transition);
+    }
+    .btn-quick-add:hover {
+      transform: scale(1.06);
+      background: linear-gradient(135deg, #915e38 0%, #7d4d29 100%);
+    }
+
+    /* House Special Mobile Card */
+    .special-feature-card {
+      background: linear-gradient(170deg, #fbf6f0 0%, #faede0 100%);
+      border: 1px solid rgba(220, 195, 170, 0.75);
+      border-radius: 28px;
+      padding: 26px 22px;
+      margin-top: 28px;
+      position: relative;
+      box-shadow: 0 20px 50px rgba(50, 32, 18, 0.22), 0 2px 0 rgba(255, 255, 255, 0.8) inset;
+    }
+    .special-badge {
+      display: inline-block;
+      background: #58853f; /* Botanical green */
+      color: #ffffff;
+      font-size: 0.68rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      font-weight: 700;
+      padding: 4px 12px;
+      border-radius: var(--radius-pill);
+      margin-bottom: 10px;
+      box-shadow: 0 3px 8px rgba(88, 133, 63, 0.28);
+    }
+    .special-feature-card h3 {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: 1.35rem;
+      margin-bottom: 8px;
+      color: #241308;
+      font-weight: 700;
+    }
+    .special-feature-card p {
+      font-size: 0.9rem;
+      color: #4a2e1b;
+      line-height: 1.55;
+      margin-bottom: 18px;
+      font-weight: 500;
+    }
+    .special-cta-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    /* =============================================================
+       7. MOBILE RESERVATION SECTION (MATCHING CAFE.MP4 STUDIO BACKGROUND)
+       ============================================================= */
+    /* =============================================================
+       7. BOOK A TABLE (AUTHENTIC 3D MINIATURE REFERENCE DESIGN)
+       ============================================================= */
+    #reservations {
+      /* Studio tan/taupe background exactly matching reference image and cafe.mp4 */
+      background: radial-gradient(circle at 70% 50%, #9e8166 0%, #95775d 45%, #88674d 100%);
+      color: var(--text-main);
+      position: relative;
+      overflow: hidden;
+      padding: 60px 16px 80px;
+    }
+
+    .ref-booking-stage {
+      width: 100%;
+      max-width: 1140px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column-reverse;
+      gap: 32px;
+      align-items: center;
+      justify-content: center;
+    }
+
+    @media (min-width: 900px) {
+      .ref-booking-stage {
+        display: grid;
+        grid-template-columns: 420px 1fr;
+        gap: 40px;
+        align-items: center;
+      }
+    }
+
+    /* CARD CONTAINER WITH CLAY DETAILS & VINES */
+    .ref-card-container {
+      position: relative;
+      width: 100%;
+      max-width: 420px;
+      margin: 0 auto;
+    }
+
+    /* Clay masking tape on top right */
+    .ref-card-tape {
+      position: absolute;
+      top: -12px;
+      right: 28px;
+      width: 68px;
+      height: 24px;
+      background: #9c6c44;
+      background: linear-gradient(135deg, #a8764c 0%, #8c5d37 100%);
+      border-radius: 4px;
+      transform: rotate(22deg);
+      box-shadow: 0 4px 10px rgba(60, 36, 18, 0.35);
+      z-index: 5;
+    }
+
+    /* Botanical vine & flowers along left edge */
+    .ref-botanical-vine {
+      position: absolute;
+      left: -24px;
+      top: -20px;
+      bottom: -15px;
+      width: 85px;
+      pointer-events: none;
+      z-index: 4;
+      filter: drop-shadow(0 4px 8px rgba(40, 25, 12, 0.22));
+    }
+
+    /* Coffee beans at bottom-left */
+    .ref-coffee-beans {
+      position: absolute;
+      bottom: 8px;
+      left: -28px;
+      pointer-events: none;
+      z-index: 5;
+      filter: drop-shadow(0 4px 6px rgba(40, 25, 12, 0.25));
+    }
+
+    /* Tactile Handmade Paper Card */
+    .ref-booking-card {
+      position: relative;
+      background: #fbf5ee;
+      background: linear-gradient(170deg, #fbf6f0 0%, #faede0 100%);
+      border-radius: 34px;
+      padding: 34px 28px 28px;
+      box-shadow: 0 25px 60px rgba(50, 32, 18, 0.32), 0 2px 0 rgba(255, 255, 255, 0.8) inset;
+      border: 1px solid rgba(220, 195, 170, 0.6);
+      z-index: 2;
+    }
+
+    /* Header with Title and Doodle */
+    .ref-card-header {
+      margin-bottom: 22px;
+    }
+
+    .ref-title-flex {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .ref-title {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: 2.35rem;
+      line-height: 1.05;
+      color: #241308;
+      font-weight: 700;
+      letter-spacing: -0.01em;
+    }
+
+    .ref-book-cursive {
+      font-family: 'Caveat', cursive, sans-serif;
+      font-size: 2.5rem;
+      display: block;
+      font-weight: 700;
+      line-height: 0.95;
+      color: #241308;
+    }
+
+    .ref-table-word {
+      position: relative;
+      display: inline-block;
+    }
+
+    /* 3 doodle rays beside 'Table' */
+    .ref-rays {
+      position: absolute;
+      top: -2px;
+      right: -22px;
+      width: 20px;
+      height: 20px;
+    }
+
+    /* Coffee cup doodle */
+    .ref-cup-icon {
+      width: 48px;
+      height: 48px;
+      flex-shrink: 0;
+      margin-top: 4px;
+    }
+
+    .ref-subtitle {
+      font-family: var(--font-body);
+      font-size: 0.92rem;
+      color: #4a2e1b;
+      line-height: 1.45;
+      margin-top: 10px;
+      font-weight: 600;
+    }
+
+    .ref-heart {
+      color: #a8583b;
+      display: inline-block;
+    }
+
+    /* Pill-shaped Form Controls */
+    .ref-inputs-wrap {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+
+    .ref-input-pill {
+      display: flex;
+      align-items: center;
+      background: #ffffff;
+      border-radius: 18px;
+      padding: 10px 16px;
+      box-shadow: 0 2px 6px rgba(100, 70, 45, 0.05), inset 0 1px 2px rgba(0, 0, 0, 0.04);
+      border: 1px solid rgba(190, 160, 130, 0.35);
+      transition: border-color 0.25s ease, box-shadow 0.25s ease;
+      position: relative;
+    }
+
+    .ref-input-pill:focus-within {
+      border-color: #825432;
+      box-shadow: 0 3px 12px rgba(130, 84, 50, 0.16);
+    }
+
+    .ref-field-icon {
+      width: 20px;
+      height: 20px;
+      fill: #825432;
+      flex-shrink: 0;
+      margin-right: 12px;
+      opacity: 0.85;
+    }
+
+    .ref-field {
+      width: 100%;
+      border: none;
+      background: transparent;
+      font-family: var(--font-body);
+      font-size: 0.88rem;
+      color: #241308;
+      font-weight: 600;
+      outline: none;
+      cursor: pointer;
+      appearance: none;
+      -webkit-appearance: none;
+      -moz-appearance: none;
+    }
+
+    .ref-field option {
+      background: #fbf5ee;
+      color: #241308;
+      font-weight: 600;
+      padding: 6px;
+    }
+
+    .ref-field::placeholder {
+      color: #6d4e38;
+      font-weight: 500;
+    }
+
+    .ref-chevron {
+      color: #825432;
+      font-size: 0.85rem;
+      margin-left: 8px;
+      pointer-events: none;
+      opacity: 0.7;
+    }
+
+    /* Guest details companion row */
+    .ref-companion-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-bottom: 18px;
+    }
+
+    .ref-mini-input {
+      width: 100%;
+      background: rgba(255, 255, 255, 0.9);
+      border: 1px solid rgba(190, 160, 130, 0.35);
+      border-radius: 14px;
+      padding: 9px 12px;
+      font-size: 0.82rem;
+      color: #241308;
+      font-family: var(--font-body);
+      font-weight: 600;
+      outline: none;
+      transition: all 0.25s;
+    }
+    .ref-mini-input:focus {
+      border-color: #825432;
+      background: #ffffff;
+      box-shadow: 0 2px 8px rgba(130, 84, 50, 0.12);
+    }
+    .ref-mini-input::placeholder {
+      color: #6d4e38;
+      font-weight: 500;
+    }
+
+    /* Button Wrap & Hand-Drawn Doodle Arrow */
+    .ref-button-wrap {
+      position: relative;
+    }
+
+    .ref-book-btn {
+      width: 100%;
+      background: #7d502f;
+      background: linear-gradient(135deg, #845532 0%, #744626 100%);
+      color: #fff9f3;
+      border: none;
+      border-radius: 18px;
+      padding: 13px 24px;
+      font-family: var(--font-body);
+      font-size: 0.96rem;
+      font-weight: 700;
+      letter-spacing: 0.02em;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      cursor: pointer;
+      box-shadow: 0 8px 22px rgba(116, 70, 38, 0.38);
+      transition: transform 0.25s ease, box-shadow 0.25s ease, background 0.25s ease;
+      text-decoration: none;
+    }
+
+    .ref-book-btn:hover {
+      background: linear-gradient(135deg, #915e38 0%, #7d4d29 100%);
+      transform: translateY(-2px);
+      box-shadow: 0 12px 28px rgba(116, 70, 38, 0.52);
+    }
+
+    .ref-book-btn:active {
+      transform: translateY(0);
+    }
+
+    .ref-book-btn .btn-arrow {
+      font-size: 1.15rem;
+      transition: transform 0.25s;
+    }
+    .ref-book-btn:hover .btn-arrow {
+      transform: translateX(4px);
+    }
+
+    .ref-doodle-arrow {
+      position: absolute;
+      right: -8px;
+      bottom: -24px;
+      width: 40px;
+      height: 28px;
+      pointer-events: none;
+    }
+
+    /* RIGHT COLUMN: SEAMLESS CAFE MODEL (NO VIDEO PLAYER LOOK, NO EXTRA HOVER) */
+    /* RIGHT COLUMN: SEAMLESS CAFE MODEL (NO VIDEO PLAYER LOOK) */
+    .ref-model-wrap {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+    }
+
+    .ref-video-box {
+      width: 100%;
+      max-width: 680px;
+      aspect-ratio: 16 / 9;
+      position: relative;
+      /* Soft radial edge feathering directly dissolving video into studio backdrop */
+      -webkit-mask-image: radial-gradient(ellipse at center, black 65%, transparent 98%);
+      mask-image: radial-gradient(ellipse at center, black 65%, transparent 98%);
+      pointer-events: none;
+    }
+
+    .ref-video-box video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      pointer-events: none;
+    }
+
+    /* Mobile Coffee Icon Video Toggle Button */
+    .mobile-coffee-toggle {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      position: absolute;
+      bottom: 14px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(251, 245, 238, 0.96);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border: 1.5px solid rgba(220, 195, 170, 0.9);
+      border-radius: var(--radius-pill);
+      padding: 9px 20px 9px 14px;
+      color: #241308;
+      font-family: var(--font-body);
+      font-size: 0.84rem;
+      font-weight: 700;
+      letter-spacing: 0.02em;
+      cursor: pointer;
+      box-shadow: 0 8px 24px rgba(50, 32, 18, 0.28);
+      z-index: 10;
+      pointer-events: auto;
+      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+      white-space: nowrap;
+    }
+
+    .mobile-coffee-toggle:active {
+      transform: translateX(-50%) scale(0.95);
+    }
+
+    .mobile-coffee-toggle.active {
+      background: linear-gradient(135deg, #845532 0%, #744626 100%);
+      color: #fff9f3;
+      border-color: #744626;
+      box-shadow: 0 8px 26px rgba(116, 70, 38, 0.5);
+    }
+
+    .coffee-cup-icon-badge {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #845532 0%, #744626 100%);
+      display: grid;
+      place-items: center;
+      position: relative;
+      flex-shrink: 0;
+      box-shadow: 0 2px 8px rgba(116, 70, 38, 0.3);
+      transition: all 0.25s;
+    }
+
+    .mobile-coffee-toggle.active .coffee-cup-icon-badge {
+      background: #fff9f3;
+      box-shadow: 0 0 12px rgba(255, 249, 243, 0.6);
+    }
+
+    .coffee-toggle-svg {
+      width: 14px;
+      height: 14px;
+      fill: #fff9f3;
+      transition: fill 0.25s;
+    }
+
+    .mobile-coffee-toggle.active .coffee-toggle-svg {
+      fill: #744626;
+    }
+
+    /* Animated Steam Dots above coffee icon */
+    .coffee-steam-dot {
+      position: absolute;
+      width: 3px;
+      height: 3px;
+      background: #fff9f3;
+      border-radius: 50%;
+      top: -3px;
+      opacity: 0;
+      pointer-events: none;
+    }
+    .mobile-coffee-toggle.active .coffee-steam-dot {
+      background: #fff9f3;
+    }
+    .coffee-steam-dot.dot-1 { left: 8px; }
+    .coffee-steam-dot.dot-2 { left: 13px; }
+    .coffee-steam-dot.dot-3 { left: 18px; }
+
+    .mobile-coffee-toggle.active .coffee-steam-dot.dot-1 {
+      animation: steamBubble 1.2s infinite 0.1s;
+    }
+    .mobile-coffee-toggle.active .coffee-steam-dot.dot-2 {
+      animation: steamBubble 1.2s infinite 0.4s;
+    }
+    .mobile-coffee-toggle.active .coffee-steam-dot.dot-3 {
+      animation: steamBubble 1.2s infinite 0.25s;
+    }
+
+    @keyframes steamBubble {
+      0% { transform: translateY(0); opacity: 0; }
+      40% { opacity: 0.9; }
+      100% { transform: translateY(-8px); opacity: 0; }
+    }
+
+    /* Hand-Drawn Coffee Cup Doodle in Card Header */
+    .ref-cup-btn {
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 3px;
+      flex-shrink: 0;
+      margin-top: 4px;
+      transition: transform 0.2s ease;
+      touch-action: manipulation;
+    }
+    .ref-cup-btn:active {
+      transform: scale(0.92);
+    }
+    .ref-cup-hint {
+      font-family: var(--font-body);
+      font-size: 0.62rem;
+      font-weight: 700;
+      color: #683b1a;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      background: rgba(132, 85, 50, 0.12);
+      border: 1px solid rgba(132, 85, 50, 0.2);
+      padding: 2px 8px;
+      border-radius: var(--radius-pill);
+      transition: all 0.25s ease;
+      white-space: nowrap;
+    }
+    .ref-cup-btn.active .ref-cup-hint {
+      background: linear-gradient(135deg, #845532 0%, #744626 100%);
+      color: #fff9f3;
+      border-color: #744626;
+      box-shadow: 0 2px 8px rgba(116, 70, 38, 0.3);
+    }
+    .ref-cup-btn.active .steam-group {
+      animation: steamFloat 1.4s infinite ease-in-out;
+    }
+    @keyframes steamFloat {
+      0%, 100% { transform: translateY(0); opacity: 0.7; }
+      50% { transform: translateY(-3px); opacity: 1; }
+    }
+
+    /* =============================================================
+       8. VISIT & REVIEWS (UNIFIED BOOK-A-TABLE PARCHMENT THEME)
+       ============================================================= */
+    .mobile-reviews-wrap {
+      display: flex;
+      gap: 14px;
+      overflow-x: auto;
+      scrollbar-width: none;
+      -webkit-overflow-scrolling: touch;
+      margin: 0 -18px 26px;
+      padding: 0 18px 6px;
+    }
+    .mobile-reviews-wrap::-webkit-scrollbar { display: none; }
+
+    .review-bubble {
+      flex-shrink: 0;
+      width: 290px;
+      background: linear-gradient(170deg, #fbf6f0 0%, #faede0 100%);
+      border: 1px solid rgba(220, 195, 170, 0.65);
+      border-radius: 24px;
+      padding: 22px 20px;
+      box-shadow: 0 14px 32px rgba(50, 32, 18, 0.12), 0 1px 0 rgba(255, 255, 255, 0.8) inset;
+    }
+    .review-stars {
+      color: #c98835;
+      font-size: 0.95rem;
+      letter-spacing: 2px;
+      margin-bottom: 10px;
+    }
+    .review-quote {
+      font-size: 0.9rem;
+      line-height: 1.6;
+      color: #241308;
+      margin-bottom: 16px;
+      font-style: italic;
+      font-family: 'Playfair Display', Georgia, serif;
+    }
+    .reviewer-title {
+      font-size: 0.86rem;
+      font-weight: 800;
+      color: #241308;
+    }
+    .reviewer-sub {
+      font-size: 0.74rem;
+      color: #553621;
+      font-weight: 600;
+    }
+
+    /* Visit quick action buttons */
+    .visit-quick-buttons {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-top: 20px;
+    }
+    .btn-action-card {
+      background: linear-gradient(170deg, #fbf6f0 0%, #faede0 100%);
+      border: 1px solid rgba(220, 195, 170, 0.65);
+      border-radius: 20px;
+      padding: 16px 14px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      color: #241308;
+      text-decoration: none;
+      font-size: 0.88rem;
+      font-weight: 700;
+      cursor: pointer;
+      box-shadow: 0 8px 22px rgba(50, 32, 18, 0.1);
+      transition: var(--transition);
+    }
+    .btn-action-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 28px rgba(50, 32, 18, 0.18);
+      border-color: #845532;
+    }
+    .btn-action-card svg {
+      width: 22px;
+      height: 22px;
+      fill: #845532;
+      flex-shrink: 0;
+    }
+
+    /* Hours Sheet */
+    .hours-sheet {
+      background: linear-gradient(170deg, #fbf6f0 0%, #faede0 100%);
+      border: 1px solid rgba(220, 195, 170, 0.65);
+      border-radius: 24px;
+      padding: 24px;
+      margin-top: 24px;
+      box-shadow: 0 16px 36px rgba(50, 32, 18, 0.14), 0 2px 0 rgba(255, 255, 255, 0.8) inset;
+    }
+    .hours-sheet h4 {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: 1.15rem;
+      color: #241308;
+      font-weight: 700;
+      margin-bottom: 12px;
+    }
+    .hours-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 10px 0;
+      font-size: 0.86rem;
+      color: #4a2e1b;
+      font-weight: 500;
+      border-bottom: 1px solid rgba(132, 85, 50, 0.12);
+    }
+    .hours-row:last-child { border: none; }
+    .hours-row.today {
+      color: #241308;
+      font-weight: 800;
+    }
+
+    /* Mobile Footer */
+    .mobile-footer {
+      padding: 42px 0 24px;
+      text-align: center;
+      color: #fff9f3;
+      font-size: 0.85rem;
+      font-weight: 500;
+      border-top: 1px solid rgba(255, 255, 255, 0.22);
+      margin-top: 48px;
+      text-shadow: 0 1px 4px rgba(45, 26, 14, 0.35);
+    }
+
+    /* Modal Dialog */
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(45, 28, 16, 0.7);
+      backdrop-filter: blur(10px);
+      z-index: 1000;
+      display: none;
+      place-items: center;
+      padding: 20px;
+    }
+    .modal-backdrop.open { display: grid; }
+
+    .modal-sheet {
+      background: linear-gradient(170deg, #fbf6f0 0%, #faede0 100%);
+      border: 1px solid rgba(220, 195, 170, 0.8);
+      border-radius: 32px;
+      padding: 36px 28px;
+      width: min(440px, 100%);
+      text-align: center;
+      box-shadow: 0 25px 60px rgba(50, 32, 18, 0.4);
+      animation: sheetUp 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      color: #241308;
+    }
+    .modal-check-icon {
+      width: 58px;
+      height: 58px;
+      border-radius: 50%;
+      background: #58853f; /* Botanical green */
+      border: none;
+      display: grid;
+      place-items: center;
+      margin: 0 auto 16px;
+      box-shadow: 0 6px 18px rgba(88, 133, 63, 0.35);
+    }
+    .modal-check-icon svg { width: 30px; height: 30px; fill: #ffffff; }
+
+    /* Toast */
+    #mobileToast {
+      position: fixed;
+      bottom: calc(var(--bottom-nav-height) + var(--sab) + 16px);
+      left: 50%;
+      transform: translateX(-50%) translateY(30px);
+      background: #fbf5ee;
+      border: 1px solid #744626;
+      border-radius: var(--radius-pill);
+      padding: 10px 22px;
+      color: #241308;
+      font-weight: 700;
+      font-size: 0.85rem;
+      box-shadow: 0 10px 30px rgba(50, 32, 18, 0.25);
+      z-index: 120;
+      opacity: 0;
+      pointer-events: none;
+      transition: all 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+      white-space: nowrap;
+    }
+    #mobileToast.show {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+
+    /* Keyframe Animations */
+    @keyframes pulseGlow {
+      0%, 100% { box-shadow: 0 0 14px rgba(255, 245, 235, 0.3); }
+      50% { box-shadow: 0 0 26px rgba(255, 245, 235, 0.7); }
+    }
+    @keyframes bouncePrompt {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-6px); }
+    }
+    @keyframes wave {
+      0%, 100% { height: 4px; }
+      50% { height: 12px; }
+    }
+    @keyframes sheetUp {
+      from { transform: translateY(30px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+
+    /* =============================================================
+       9. DESKTOP VIEWPORT LAYOUTS (min-width: 900px)
+       ============================================================= */
+    @media (min-width: 900px) {
+      /* Hide mobile bottom bar on desktop */
+      .mobile-bottom-bar {
+        display: none !important;
+      }
+
+      /* Desktop Navigation Bar */
+      .app-header {
+        position: fixed;
+        top: 18px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: min(1220px, calc(100vw - 48px));
+        padding: 10px 24px;
+        background: rgba(251, 245, 238, 0.94);
+        backdrop-filter: blur(24px);
+        -webkit-backdrop-filter: blur(24px);
+        border: 1px solid rgba(220, 195, 170, 0.8);
+        border-radius: 9999px;
+        box-shadow: 0 14px 40px rgba(50, 32, 18, 0.18), 0 2px 0 rgba(255, 255, 255, 0.9) inset;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        pointer-events: auto;
+      }
+
+      .brand-pill {
+        background: transparent;
+        border: none;
+        box-shadow: none;
+        padding: 0;
+        gap: 12px;
+      }
+
+      .brand-avatar {
+        width: 36px;
+        height: 36px;
+        background: linear-gradient(135deg, #845532 0%, #744626 100%);
+        border: 1px solid rgba(220, 195, 170, 0.8);
+        box-shadow: 0 4px 12px rgba(116, 70, 38, 0.3);
+      }
+      .brand-avatar svg {
+        width: 18px;
+        height: 18px;
+        fill: #fff9f3;
+      }
+
+      .brand-text-col {
+        display: flex;
+        flex-direction: column;
+      }
+
+      .brand-title {
+        font-family: 'Playfair Display', Georgia, serif;
+        font-size: 1.15rem;
+        font-weight: 700;
+        letter-spacing: 0.02em;
+        color: #241308;
+        text-transform: none;
+        line-height: 1.1;
+      }
+
+      .brand-tagline {
+        display: block !important;
+        font-family: 'Caveat', cursive, sans-serif;
+        font-size: 0.95rem;
+        color: #683b1a;
+        font-weight: 700;
+        line-height: 1;
+        margin-top: 2px;
+      }
+
+      /* Desktop Centered Nav Links */
+      .desktop-nav-links {
+        display: flex !important;
+        align-items: center;
+        gap: 24px;
+      }
+
+      .desktop-nav-link {
+        color: #241308;
+        font-family: var(--font-body);
+        font-size: 0.92rem;
+        font-weight: 700;
+        letter-spacing: 0.01em;
+        text-decoration: none;
+        padding: 7px 16px;
+        border-radius: 9999px;
+        transition: all 0.22s ease;
+      }
+
+      .desktop-nav-link:hover {
+        color: #241308;
+        background: rgba(132, 85, 50, 0.1);
+      }
+
+      .desktop-nav-link.active {
+        color: #fff9f3;
+        background: linear-gradient(135deg, #845532 0%, #744626 100%);
+        box-shadow: 0 4px 14px rgba(116, 70, 38, 0.32);
+        font-weight: 700;
+      }
+
+      .header-quick-actions {
+        gap: 12px;
+      }
+
+      .icon-pill-btn {
+        width: auto;
+        height: 38px;
+        border-radius: 9999px;
+        padding: 0 14px;
+        background: #ffffff;
+        border: 1px solid rgba(190, 160, 130, 0.45);
+        color: #241308;
+        box-shadow: 0 2px 8px rgba(60, 38, 20, 0.08);
+        display: inline-flex;
+        align-items: center;
+        gap: 7px;
+      }
+
+      .icon-pill-btn:hover {
+        border-color: #845532;
+        color: #241308;
+        transform: translateY(-1px);
+        box-shadow: 0 4px 12px rgba(60, 38, 20, 0.14);
+      }
+
+      .icon-pill-btn.active {
+        background: #845532;
+        border-color: #744626;
+        color: #fff9f3;
+      }
+
+      .btn-desktop-label {
+        display: inline-block !important;
+        font-size: 0.82rem;
+        font-weight: 600;
+      }
+
+      .desktop-reserve-cta {
+        display: inline-flex !important;
+        align-items: center;
+        gap: 8px;
+        background: linear-gradient(135deg, #845532 0%, #744626 100%);
+        color: #fff9f3;
+        padding: 10px 22px;
+        border-radius: 9999px;
+        font-family: var(--font-body);
+        font-size: 0.88rem;
+        font-weight: 700;
+        letter-spacing: 0.02em;
+        text-decoration: none;
+        box-shadow: 0 6px 18px rgba(116, 70, 38, 0.35);
+        transition: transform 0.25s ease, box-shadow 0.25s ease, background 0.25s ease;
+      }
+
+      .desktop-reserve-cta:hover {
+        background: linear-gradient(135deg, #915e38 0%, #7d4d29 100%);
+        transform: translateY(-2px);
+        box-shadow: 0 10px 24px rgba(116, 70, 38, 0.45);
+      }
+
+      .desktop-reserve-cta .cta-arrow {
+        font-size: 1.1rem;
+        transition: transform 0.25s;
+      }
+      .desktop-reserve-cta:hover .cta-arrow {
+        transform: translateX(4px);
+      }
+
+      /* Desktop Hero Viewport Redesign */
+      .mobile-tour-viewport {
+        background: radial-gradient(circle at 65% 50%, #9e8166 0%, #95775d 45%, #88674d 100%);
+      }
+
+      .vignette {
+        background: radial-gradient(circle at 65% 50%, transparent 42%, rgba(60, 38, 20, 0.22) 75%, rgba(45, 28, 16, 0.55) 100%);
+      }
+
+      /* Desktop Hero Story Vitrine Panel */
+      .story-container {
+        position: absolute;
+        left: max(40px, calc((100vw - 1240px) / 2));
+        top: 0;
+        bottom: 0;
+        width: 460px;
+        padding: 0;
+        display: flex;
+        align-items: center; /* Centered vertically on left side of desktop screen */
+        justify-content: flex-start;
+        pointer-events: none;
+        z-index: 25;
+      }
+
+      .story-card {
+        width: 100%;
+        max-width: 440px;
+        background: #fbf5ee;
+        background: linear-gradient(170deg, #fbf6f0 0%, #faede0 100%);
+        border-radius: 34px;
+        padding: 38px 32px 32px;
+        border: 1px solid rgba(220, 195, 170, 0.75);
+        box-shadow: 0 25px 60px rgba(50, 32, 18, 0.32), 0 2px 0 rgba(255, 255, 255, 0.8) inset;
+        position: relative;
+        overflow: visible;
+        transform: translateY(20px) scale(0.97);
+      }
+
+      .story-card.active {
+        transform: translateY(0) scale(1);
+      }
+
+      /* Clay masking tape on top right of story card */
+      .story-card::before {
+        content: '';
+        position: absolute;
+        top: -12px;
+        right: 28px;
+        width: 68px;
+        height: 24px;
+        background: linear-gradient(135deg, #a8764c 0%, #8c5d37 100%);
+        border-radius: 4px;
+        transform: rotate(20deg);
+        box-shadow: 0 4px 10px rgba(60, 36, 18, 0.32);
+        z-index: 5;
+      }
+
+      .story-tag {
+        font-family: 'Caveat', cursive, sans-serif;
+        font-size: 1.3rem;
+        color: #552e12;
+        font-weight: 700;
+        letter-spacing: 0.02em;
+        text-transform: none;
+        margin-bottom: 6px;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+      }
+
+      .story-tag::before {
+        width: 6px;
+        height: 6px;
+        background: #58853f; /* Botanical green */
+        border-radius: 50%;
+      }
+
+      .story-title {
+        font-family: 'Playfair Display', Georgia, serif;
+        font-size: 2.35rem;
+        line-height: 1.15;
+        color: #241308;
+        font-weight: 700;
+        margin-bottom: 12px;
+        letter-spacing: -0.01em;
+      }
+
+      .story-desc {
+        font-size: 0.96rem;
+        line-height: 1.65;
+        color: #4a2e1b;
+        margin-bottom: 24px;
+        font-weight: 500;
+      }
+
+      .story-actions {
+        gap: 12px;
+      }
+
+      .story-actions .btn-gold {
+        background: linear-gradient(135deg, #845532 0%, #744626 100%);
+        color: #fff9f3;
+        font-size: 0.88rem;
+        font-weight: 700;
+        padding: 10px 22px;
+        border-radius: 9999px;
+        box-shadow: 0 6px 18px rgba(116, 70, 38, 0.35);
+        border: none;
+      }
+      .story-actions .btn-gold:hover {
+        background: linear-gradient(135deg, #915e38 0%, #7d4d29 100%);
+        transform: translateY(-2px);
+        box-shadow: 0 10px 24px rgba(116, 70, 38, 0.45);
+      }
+
+      .story-actions .btn-outline {
+        background: #ffffff;
+        border: 1px solid rgba(190, 160, 130, 0.5);
+        color: #241308;
+        font-size: 0.88rem;
+        font-weight: 700;
+        padding: 10px 20px;
+        border-radius: 9999px;
+        box-shadow: 0 2px 6px rgba(100, 70, 45, 0.06);
+      }
+      .story-actions .btn-outline:hover {
+        border-color: #845532;
+        color: #241308;
+        background: #fbf5ee;
+      }
+
+      /* Desktop Scrubber Controller Dock */
+      .mobile-scrubber-dock {
+        bottom: 32px;
+        left: 50%;
+        transform: translateX(-50%);
+        max-width: 780px;
+        width: calc(100% - 64px);
+        background: rgba(251, 245, 238, 0.94);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        border: 1px solid rgba(220, 195, 170, 0.8);
+        border-radius: 9999px;
+        padding: 10px 22px;
+        box-shadow: 0 16px 40px rgba(50, 32, 18, 0.2), 0 2px 0 rgba(255, 255, 255, 0.9) inset;
+        gap: 18px;
+      }
+
+      .chapter-chip {
+        font-size: 0.82rem;
+        color: #4a2e1b;
+        font-weight: 700;
+        padding: 6px 14px;
+        border-radius: 9999px;
+      }
+
+      .chapter-chip.active {
+        color: #fff9f3;
+        background: linear-gradient(135deg, #845532 0%, #744626 100%);
+        box-shadow: 0 3px 10px rgba(116, 70, 38, 0.3);
+      }
+
+      .scrubber-track {
+        height: 8px;
+        background: rgba(140, 95, 60, 0.16);
+        border-radius: 99px;
+      }
+
+      .scrubber-fill {
+        background: linear-gradient(90deg, #9c6c44, #744626);
+      }
+
+      .scrubber-handle {
+        width: 18px;
+        height: 18px;
+        background: #ffffff;
+        border: 3px solid #744626;
+        box-shadow: 0 2px 8px rgba(60, 36, 18, 0.35);
+      }
+
+      .scrubber-frame-tag {
+        color: #241308;
+        font-size: 0.82rem;
+        font-weight: 800;
+        letter-spacing: 0.06em;
+      }
+
+      #scroll-prompt {
+        bottom: 96px;
+      }
+      .swipe-pill {
+        background: rgba(251, 245, 238, 0.92);
+        border: 1px solid rgba(220, 195, 170, 0.85);
+        color: #241308;
+        box-shadow: 0 8px 24px rgba(50, 32, 18, 0.16);
+        font-size: 0.78rem;
+        padding: 8px 20px;
+      }
+
+      /* Desktop Section Layouts */
+      .mobile-craft-grid {
+        grid-template-columns: repeat(4, 1fr);
+        gap: 20px;
+      }
+
+      .mobile-menu-list {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 20px;
+      }
+
+      .menu-chips-scroll {
+        justify-content: center;
+        margin-bottom: 32px;
+      }
+
+      .mobile-reviews-wrap {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 24px;
+        overflow: visible;
+        margin: 0 0 32px;
+        padding: 0;
+      }
+
+      .review-bubble {
+        width: 100%;
+      }
+
+      .mobile-coffee-toggle {
+        display: none !important;
+      }
+      .ref-cup-hint {
+        display: none !important;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      * { animation: none !important; transition: none !important; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- =============================================================
+       1. TOP MOBILE HEADER
+       ============================================================= -->
+  <header class="app-header">
+    <div class="brand-pill" onclick="scrollToTourProgress(0)">
+      <div class="brand-avatar">
+        <svg viewBox="0 0 24 24">
+          <path d="M2,21H20V19H2M20,8H18V5H20M20,3H4V13A4,4 0 0,0 8,17H14A4,4 0 0,0 18,13V10H20A2,2 0 0,0 22,8V5C22,3.89 21.1,3 20,3Z"/>
+        </svg>
+      </div>
+      <div class="brand-text-col">
+        <span class="brand-title">Le Petit Café</span>
+        <span class="brand-tagline">1:12 Miniature Roastery</span>
+      </div>
+    </div>
+
+    <!-- Center Desktop Navigation Links (Hidden on Mobile) -->
+    <nav class="desktop-nav-links" id="desktopNav">
+      <a href="#experience" class="desktop-nav-link active" data-nav="experience">Tour</a>
+      <a href="#philosophy" class="desktop-nav-link" data-nav="philosophy">Craft</a>
+      <a href="#menu" class="desktop-nav-link" data-nav="menu">Menu</a>
+      <a href="#reservations" class="desktop-nav-link" data-nav="reservations">Book a Table</a>
+      <a href="#visit" class="desktop-nav-link" data-nav="visit">Visit</a>
+    </nav>
+
+    <div class="header-quick-actions">
+      <!-- Auto Tour Pill -->
+      <button class="icon-pill-btn" id="autoTourBtn" title="Auto Tour Play/Pause">
+        <svg id="tourPlayIcon" viewBox="0 0 24 24">
+          <path d="M8,5.14V19.14L19,12.14L8,5.14Z"/>
+        </svg>
+        <span class="btn-desktop-label">Auto Tour</span>
+      </button>
+
+      <!-- Ambient Audio Pill -->
+      <button class="icon-pill-btn" id="soundBtn" title="Cozy Cafe Ambient Sound">
+        <div class="mini-wave">
+          <span></span><span></span><span></span>
+        </div>
+        <span class="btn-desktop-label">Sound</span>
+      </button>
+
+      <!-- Standout Desktop "Reserve Table" CTA Button (Hidden on Mobile) -->
+      <a href="#reservations" class="desktop-reserve-cta">
+        <span>Reserve Table</span>
+        <span class="cta-arrow">→</span>
+      </a>
+    </div>
+  </header>
+
+  <!-- =============================================================
+       2. FIXED BOTTOM THUMB NAVIGATION (MOBILE APP EXPERIENCE)
+       ============================================================= -->
+  <nav class="mobile-bottom-bar" id="bottomNav">
+    <a href="#experience" class="nav-tab-btn active" data-nav="experience">
+      <svg viewBox="0 0 24 24"><path d="M12,2L1,12H4V20H10V14H14V20H20V12H23L12,2Z"/></svg>
+      <span>Tour</span>
+    </a>
+
+    <a href="#philosophy" class="nav-tab-btn" data-nav="philosophy">
+      <svg viewBox="0 0 24 24"><path d="M12,3L1,9L12,15L21,10.09V17H23V9M5,13.18V17.18L12,21L19,17.18V13.18L12,17L5,13.18Z"/></svg>
+      <span>Craft</span>
+    </a>
+
+    <a href="#menu" class="nav-tab-btn" data-nav="menu">
+      <svg viewBox="0 0 24 24"><path d="M2,21H20V19H2M20,8H18V5H20M20,3H4V13A4,4 0 0,0 8,17H14A4,4 0 0,0 18,13V10H20A2,2 0 0,0 22,8V5C22,3.89 21.1,3 20,3Z"/></svg>
+      <span>Menu</span>
+    </a>
+
+    <a href="#reservations" class="nav-tab-btn highlight" data-nav="reservations">
+      <svg viewBox="0 0 24 24"><path d="M19,3H18V1H16V3H8V1H6V3H5C3.89,3 3,3.9 3,5V19A2,2 0 0,0 5,21H19A2,2 0 0,0 21,19V5C21,3.9 20.1,3 19,3M19,19H5V9H19V19M19,7H5V5H19V7M7,11H9V13H7V11M11,11H13V13H11V11M15,11H17V13H15V11Z"/></svg>
+      <span>Reserve</span>
+    </a>
+
+    <a href="#visit" class="nav-tab-btn" data-nav="visit">
+      <svg viewBox="0 0 24 24"><path d="M12,11.5A2.5,2.5 0 0,1 9.5,9A2.5,2.5 0 0,1 12,6.5A2.5,2.5 0 0,1 14.5,9A2.5,2.5 0 0,1 12,11.5M12,2A7,7 0 0,0 5,9C5,14.25 12,22 12,22C12,22 19,14.25 19,9A7,7 0 0,0 12,2Z"/></svg>
+      <span>Visit</span>
+    </a>
+  </nav>
+
+  <!-- =============================================================
+       3. INTERACTIVE 3D TOUR SECTION (STICKY MOBILE CANVAS)
+       ============================================================= -->
+  <section id="experience">
+    <div class="mobile-tour-viewport">
+      
+      <!-- Top Strip -->
+      <div id="progress-strip"></div>
+
+      <!-- Canvas Engine -->
+      <canvas id="frameCanvas"></canvas>
+      <div class="vignette"></div>
+
+      <!-- Splash Preloader -->
+      <div id="preloader">
+        <div class="preloader-emblem">
+          <svg viewBox="0 0 24 24">
+            <path d="M2,21H20V19H2M20,8H18V5H20M20,3H4V13A4,4 0 0,0 8,17H14A4,4 0 0,0 18,13V10H20A2,2 0 0,0 22,8V5C22,3.89 21.1,3 20,3Z"/>
+          </svg>
+        </div>
+        <h1 class="preloader-title">Le Petit Café</h1>
+        <p class="preloader-subtitle">Miniature Artisan Roastery</p>
+        <div class="loader-bar-wrap">
+          <div class="loader-bar" id="loaderBar"></div>
+        </div>
+        <div class="loader-status" id="loaderStatusText">Buffering miniature frames...</div>
+      </div>
+
+      <!-- Swipe / Scroll Prompt -->
+      <div id="scroll-prompt">
+        <div class="swipe-pill">
+          <span>Swipe Down to Enter</span>
+          <span>↓</span>
+        </div>
+      </div>
+
+      <!-- Minimal Story Cards (Positioned at Top of Screen) -->
+      <div class="story-container">
+        
+        <!-- Chapter 0: Facade -->
+        <article class="story-card active" data-chapter="0">
+          <div class="story-tag">Act I • The Facade</div>
+          <h2 class="story-title">A World in Miniature</h2>
+          <p class="story-desc">
+            Handcrafted clay shingles, climbing ivy, and sleeping calico cats on warm terracotta tiles.
+          </p>
+          <div class="story-actions">
+            <button class="btn-gold" onclick="scrollToTourProgress(0.25)">Begin Tour ↓</button>
+            <button class="btn-outline" onclick="toggleAutoPlay()">Auto Tour</button>
+          </div>
+        </article>
+
+        <!-- Chapter 1: Veranda -->
+        <article class="story-card" data-chapter="1">
+          <div class="story-tag">Act II • The Veranda</div>
+          <h2 class="story-title">The Timber Porch</h2>
+          <p class="story-desc">
+            Passing beneath the striped awning. Sunlit bistro tables and fresh morning coffee aromas.
+          </p>
+          <div class="story-actions">
+            <button class="btn-gold" onclick="scrollToTourProgress(0.55)">Approach Door →</button>
+          </div>
+        </article>
+
+        <!-- Chapter 2: Threshold -->
+        <article class="story-card" data-chapter="2">
+          <div class="story-tag">Act III • The Threshold</div>
+          <h2 class="story-title">Crossing Inside</h2>
+          <p class="story-desc">
+            The vintage wooden door glides open to amber lanterns, roasted beans, and warm cedar nooks.
+          </p>
+          <div class="story-actions">
+            <button class="btn-gold" onclick="scrollToTourProgress(0.85)">To Counter →</button>
+          </div>
+        </article>
+
+        <!-- Chapter 3: Coffee Bar -->
+        <article class="story-card" data-chapter="3">
+          <div class="story-tag">Act IV • The Counter</div>
+          <h2 class="story-title">Artisan Coffee Bar</h2>
+          <p class="story-desc">
+            Twin-portafilter espresso machine, ceramic cups, and delicate fresh strawberry shortcakes.
+          </p>
+          <div class="story-actions">
+            <button class="btn-gold" onclick="scrollToTourProgress(1.0)">Take a Seat →</button>
+          </div>
+        </article>
+
+        <!-- Chapter 4: Welcome -->
+        <article class="story-card" data-chapter="4">
+          <div class="story-tag">Experience • Le Petit Café</div>
+          <h2 class="story-title">Your Seat is Waiting</h2>
+          <p class="story-desc">
+            Kettle is steaming, roasts are fresh, and time slows down inside the miniature sanctuary.
+          </p>
+          <div class="story-actions">
+            <a href="#menu" class="btn-gold">Explore Menu ↓</a>
+            <button class="btn-outline" onclick="scrollToTourProgress(0)">↺ Replay</button>
+          </div>
+        </article>
+
+      </div>
+
+      <!-- Mobile Timeline Scrubber Dock -->
+      <div class="mobile-scrubber-dock">
+        <div class="timeline-chips">
+          <button class="chapter-chip active" data-target="0.0">Cottage</button>
+          <button class="chapter-chip" data-target="0.30">Veranda</button>
+          <button class="chapter-chip" data-target="0.62">Door</button>
+          <button class="chapter-chip" data-target="0.88">Bar</button>
+        </div>
+
+        <div class="scrubber-track" id="scrubberTrack">
+          <div class="scrubber-fill" id="scrubberFill"></div>
+          <div class="scrubber-handle" id="scrubberHandle"></div>
+        </div>
+
+        <span class="scrubber-frame-tag" id="hudFrame">001</span>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- =============================================================
+       4. MOBILE PHILOSOPHY & CRAFT SECTION
+       ============================================================= */ -->
+  <section class="mobile-section" id="philosophy">
+    <div class="mobile-container">
+      <div class="section-badge">Our Craft</div>
+      <h2 class="section-title">Crafted at 1:12 Scale.<br>Brewed for Real Life.</h2>
+      <p class="section-desc">
+        Every detail at Le Petit Café is a tribute to deliberate craftsmanship. We source highland micro-lots and bake slow French Viennoiserie fresh daily.
+      </p>
+
+      <div class="mobile-craft-grid">
+        <div class="craft-card">
+          <div class="craft-icon">
+            <svg viewBox="0 0 24 24"><path d="M2,21H20V19H2M20,8H18V5H20M20,3H4V13A4,4 0 0,0 8,17H14A4,4 0 0,0 18,13V10H20A2,2 0 0,0 22,8V5C22,3.89 21.1,3 20,3Z"/></svg>
+          </div>
+          <h3>Micro-Lots</h3>
+          <p>Direct-trade beans from Ethiopia & Colombia roasted in small batches.</p>
+        </div>
+
+        <div class="craft-card">
+          <div class="craft-icon">
+            <svg viewBox="0 0 24 24"><path d="M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2M12,4A8,8 0 0,1 20,12A8,8 0 0,1 12,20A8,8 0 0,1 4,12A8,8 0 0,1 12,4M12,6A6,6 0 0,0 6,12A6,6 0 0,0 12,18A6,6 0 0,0 18,12A6,6 0 0,0 12,6Z"/></svg>
+          </div>
+          <h3>18h Cold Drip</h3>
+          <p>Drop-by-drop Dutch extraction through Japanese glass spirals.</p>
+        </div>
+
+        <div class="craft-card">
+          <div class="craft-icon">
+            <svg viewBox="0 0 24 24"><path d="M12,3L1,9L12,15L21,10.09V17H23V9M5,13.18V17.18L12,21L19,17.18V13.18L12,17L5,13.18Z"/></svg>
+          </div>
+          <h3>Patisserie</h3>
+          <p>Buttery Viennoiserie & miniature strawberry shortcakes.</p>
+        </div>
+
+        <div class="craft-card">
+          <div class="craft-icon">
+            <svg viewBox="0 0 24 24"><path d="M12,21.35L10.55,20.03C5.4,15.36 2,12.27 2,8.5C2,5.41 4.42,3 7.5,3C9.24,3 10.91,3.81 12,5.08C13.09,3.81 14.76,3 16.5,3C19.58,3 22,5.41 22,8.5C22,12.27 18.6,15.36 13.45,20.03L12,21.35Z"/></svg>
+          </div>
+          <h3>Cat Haven</h3>
+          <p>5% of monthly proceeds donated to local cat rescues.</p>
+        </div>
+      </div>
+
+      <!-- Quick Stats Ribbon -->
+      <div class="stats-ribbon">
+        <div class="stat-box"><h4>240</h4><p>Details</p></div>
+        <div class="stat-box"><h4>18h</h4><p>Drip</p></div>
+        <div class="stat-box"><h4>100%</h4><p>Ethical</p></div>
+        <div class="stat-box"><h4>4.9★</h4><p>Review</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- =============================================================
+       5. MOBILE MENU SECTION (SWIPEABLE TABS & QUICK ADDS)
+       ============================================================= -->
+  <section class="mobile-section" id="menu">
+    <div class="mobile-container">
+      <div class="section-badge">Seasonal Menu</div>
+      <h2 class="section-title">Artisan Brews & Pastries</h2>
+      <p class="section-desc">Handcrafted to order on our twin-portafilter machine.</p>
+
+      <!-- Horizontal Swipeable Chips -->
+      <div class="menu-chips-scroll">
+        <button class="menu-chip-btn active" data-cat="espresso">☕ Espresso</button>
+        <button class="menu-chip-btn" data-cat="pourover">💧 Cold Drip</button>
+        <button class="menu-chip-btn" data-cat="patisserie">🍰 Patisserie</button>
+        <button class="menu-chip-btn" data-cat="brunch">🥑 Brunch</button>
+      </div>
+
+      <!-- Mobile Menu Items List -->
+      <div class="mobile-menu-list" id="menuList">
+        <!-- Injected via JavaScript -->
+      </div>
+
+      <!-- House Special Highlight -->
+      <div class="special-feature-card">
+        <span class="special-badge">Chef's Signature</span>
+        <h3>Miniature Strawberry Chiffon & Kyoto Drip</h3>
+        <p>Japanese cloud sponge layered with summer strawberries & Madagascar cream, paired with slow cold drip.</p>
+        <div class="special-cta-row">
+          <span style="font-family: var(--font-display); font-size: 1.35rem; color: var(--amber); font-weight: 700;">$14.50</span>
+          <button class="btn-gold" style="flex: initial; padding: 8px 18px;" onclick="triggerToast('Added House Special to tasting order!')">Add to Order</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- =============================================================
+       6. BOOK A TABLE (ACCORDING TO REFERENCE DESIGN)
+       ============================================================= -->
+  <section class="mobile-section" id="reservations">
+    <div class="ref-booking-stage">
+      
+      <!-- LEFT: The Tactile Handmade Clay Paper Booking Card -->
+      <div class="ref-card-container">
+        
+        <!-- Masking Tape Sticker at Top-Right Corner -->
+        <div class="ref-card-tape"></div>
+
+        <!-- Climbing Botanical Ivy Vines with White Jasmine Blossoms -->
+        <svg class="ref-botanical-vine" viewBox="0 0 100 480" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M45 10 Q 15 120, 35 240 T 25 460" stroke="#4a6e35" stroke-width="3" stroke-linecap="round" fill="none" />
+          <path d="M45 15 C 20 8, 10 30, 25 45 C 38 42, 48 30, 45 15 Z" fill="#58853f" stroke="#3d6029" stroke-width="1.5"/>
+          <path d="M45 15 Q 32 30, 25 45" stroke="#77a55c" stroke-width="1.2"/>
+          <path d="M42 35 C 60 22, 75 38, 65 55 C 50 58, 40 48, 42 35 Z" fill="#699b4d" stroke="#3d6029" stroke-width="1.5"/>
+          <g transform="translate(48, 50)">
+            <ellipse cx="0" cy="-9" rx="5" ry="7" fill="#ffffff" stroke="#e8ded2" stroke-width="0.8"/>
+            <ellipse cx="8.5" cy="-2.7" rx="5" ry="7" transform="rotate(72 8.5 -2.7)" fill="#ffffff" stroke="#e8ded2" stroke-width="0.8"/>
+            <ellipse cx="5.3" cy="7.3" rx="5" ry="7" transform="rotate(144 5.3 7.3)" fill="#ffffff" stroke="#e8ded2" stroke-width="0.8"/>
+            <ellipse cx="-5.3" cy="7.3" rx="5" ry="7" transform="rotate(216 -5.3 7.3)" fill="#ffffff" stroke="#e8ded2" stroke-width="0.8"/>
+            <ellipse cx="-8.5" cy="-2.7" rx="5" ry="7" transform="rotate(288 -8.5 -2.7)" fill="#ffffff" stroke="#e8ded2" stroke-width="0.8"/>
+            <circle cx="0" cy="0" r="3.5" fill="#f5b838"/>
+          </g>
+          <path d="M25 110 C 2 95, -5 125, 10 145 C 22 140, 30 125, 25 110 Z" fill="#507c38" stroke="#385825" stroke-width="1.5"/>
+          <path d="M28 135 C 45 120, 60 135, 52 155 C 38 158, 30 148, 28 135 Z" fill="#639446" stroke="#385825" stroke-width="1.5"/>
+          <g transform="translate(18, 175)">
+            <ellipse cx="0" cy="-8" rx="4.5" ry="6.5" fill="#ffffff" stroke="#e8ded2" stroke-width="0.8"/>
+            <ellipse cx="7.6" cy="-2.5" rx="4.5" ry="6.5" transform="rotate(72 7.6 -2.5)" fill="#ffffff" stroke="#e8ded2" stroke-width="0.8"/>
+            <ellipse cx="4.7" cy="6.5" rx="4.5" ry="6.5" transform="rotate(144 4.7 6.5)" fill="#ffffff" stroke="#e8ded2" stroke-width="0.8"/>
+            <ellipse cx="-4.7" cy="6.5" rx="4.5" ry="6.5" transform="rotate(216 -4.7 6.5)" fill="#ffffff" stroke="#e8ded2" stroke-width="0.8"/>
+            <ellipse cx="-7.6" cy="-2.5" rx="4.5" ry="6.5" transform="rotate(288 -7.6 -2.5)" fill="#ffffff" stroke="#e8ded2" stroke-width="0.8"/>
+            <circle cx="0" cy="0" r="3" fill="#f5b838"/>
+          </g>
+          <path d="M30 230 C 8 215, 2 245, 16 265 C 28 260, 35 245, 30 230 Z" fill="#58853f" stroke="#3d6029" stroke-width="1.5"/>
+          <path d="M35 255 C 55 240, 70 258, 60 278 C 45 280, 36 270, 35 255 Z" fill="#699b4d" stroke="#3d6029" stroke-width="1.5"/>
+          <g transform="translate(52, 310)">
+            <ellipse cx="0" cy="-8" rx="4.5" ry="6.5" fill="#ffffff" stroke="#e8ded2" stroke-width="0.8"/>
+            <ellipse cx="7.6" cy="-2.5" rx="4.5" ry="6.5" transform="rotate(72 7.6 -2.5)" fill="#ffffff" stroke="#e8ded2" stroke-width="0.8"/>
+            <ellipse cx="4.7" cy="6.5" rx="4.5" ry="6.5" transform="rotate(144 4.7 6.5)" fill="#ffffff" stroke="#e8ded2" stroke-width="0.8"/>
+            <ellipse cx="-4.7" cy="6.5" rx="4.5" ry="6.5" transform="rotate(216 -4.7 6.5)" fill="#ffffff" stroke="#e8ded2" stroke-width="0.8"/>
+            <ellipse cx="-7.6" cy="-2.5" rx="4.5" ry="6.5" transform="rotate(288 -7.6 -2.5)" fill="#ffffff" stroke="#e8ded2" stroke-width="0.8"/>
+            <circle cx="0" cy="0" r="3" fill="#f5b838"/>
+          </g>
+          <path d="M25 360 C 2 345, -2 375, 12 395 C 24 390, 30 375, 25 360 Z" fill="#507c38" stroke="#385825" stroke-width="1.5"/>
+          <path d="M28 395 C 45 385, 55 405, 48 425 C 35 428, 28 415, 28 395 Z" fill="#639446" stroke="#385825" stroke-width="1.5"/>
+        </svg>
+
+        <!-- Roasted Coffee Beans & Leaf at Bottom-Left -->
+        <svg class="ref-coffee-beans" width="80" height="70" viewBox="0 0 80 70" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M42 35 C 55 15, 75 25, 70 45 C 55 52, 45 42, 42 35 Z" fill="#58853f" stroke="#3d6029" stroke-width="1.5"/>
+          <g transform="translate(18, 28) rotate(-25)">
+            <ellipse cx="0" cy="0" rx="12" ry="8" fill="#5c3822" stroke="#3d2112" stroke-width="1.5"/>
+            <path d="M-8 -1 Q 0 3, 8 -1" stroke="#2a1409" stroke-width="1.8" stroke-linecap="round"/>
+          </g>
+          <g transform="translate(36, 46) rotate(35)">
+            <ellipse cx="0" cy="0" rx="11" ry="7.5" fill="#694129" stroke="#3d2112" stroke-width="1.5"/>
+            <path d="M-7 0 Q 0 3, 7 0" stroke="#2a1409" stroke-width="1.8" stroke-linecap="round"/>
+          </g>
+        </svg>
+
+        <!-- The Clay Booking Card Content -->
+        <div class="ref-booking-card">
+          
+          <!-- Header with Doodle Cup & Rays -->
+          <div class="ref-card-header">
+            <div class="ref-title-flex">
+              <h2 class="ref-title">
+                <span class="ref-book-cursive">Book a</span>
+                <span class="ref-table-word">
+                  Table
+                  <!-- 3 Doodle rays -->
+                  <svg class="ref-rays" viewBox="0 0 24 24" fill="none" stroke="#241308" stroke-width="2.5" stroke-linecap="round">
+                    <path d="M4 14 L1 15 M7 9 L4 6 M13 6 L14 2"/>
+                  </svg>
+                </span>
+              </h2>
+
+              <!-- Hand-Drawn Coffee Cup Doodle Toggle Button -->
+              <button type="button" class="ref-cup-btn" id="cupDoodleToggle" aria-label="Toggle miniature cafe animation" title="Tap coffee cup to animate cafe">
+                <svg class="ref-cup-icon" viewBox="0 0 64 64" fill="none" stroke="#241308" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                  <g class="steam-group">
+                    <path class="steam-curl steam-1" d="M18 10c0-3 3-5 3-7"/>
+                    <path class="steam-curl steam-2" d="M28 8c0-3 3-5 3-7"/>
+                    <path class="steam-curl steam-3" d="M38 10c0-3 3-5 3-7"/>
+                  </g>
+                  <path d="M12 18h36c0 14-7 22-18 22s-18-8-18-22z"/>
+                  <path d="M48 22c4 0 7 2 7 6s-3 6-7 6"/>
+                  <path d="M8 46h44"/>
+                  <path d="M26 28a3 3 0 0 1 4 0 3 3 0 0 1 4 0c0 3-4 6-4 6s-4-3-4-6z" fill="#241308" stroke="none"/>
+                </svg>
+                <span class="ref-cup-hint">Tap to play</span>
+              </button>
+            </div>
+
+            <p class="ref-subtitle">
+              Good food tastes better<br>with good company <span class="ref-heart">❤</span>
+            </p>
+          </div>
+
+          <!-- Reservation Form -->
+          <form id="resForm" onsubmit="handleReservation(event)">
+            
+            <div class="ref-inputs-wrap">
+              <!-- Select Date Pill -->
+              <div class="ref-input-pill">
+                <svg class="ref-field-icon" viewBox="0 0 24 24">
+                  <path d="M19,19H5V8H19M16,1V3H8V1H6V3H5C3.89,3 3,3.89 3,5V19A2,2 0 0,0 5,21H19A2,2 0 0,0 21,19V5C21,3.89 20.1,3 19,3H18V1M17,12H12V17H17V12Z"/>
+                </svg>
+                <input type="date" id="resDate" class="ref-field" required>
+                <span class="ref-chevron">⌄</span>
+              </div>
+
+              <!-- Select Time Pill -->
+              <div class="ref-input-pill">
+                <svg class="ref-field-icon" viewBox="0 0 24 24">
+                  <path d="M12,20A8,8 0 0,0 20,12A8,8 0 0,0 12,4A8,8 0 0,0 4,12A8,8 0 0,0 12,20M12,2A10,10 0 0,1 22,12A10,10 0 0,1 12,22A10,10 0 0,1 2,12A10,10 0 0,1 12,2M12.5,7V12.25L17,14.92L16.25,16.15L11,13V7H12.5Z"/>
+                </svg>
+                <select id="resTime" class="ref-field">
+                  <option value="" disabled selected>Select Time</option>
+                  <option value="09:00 AM">09:00 AM • Morning First Roast</option>
+                  <option value="11:30 AM">11:30 AM • Brunch & Chiffon</option>
+                  <option value="02:00 PM">02:00 PM • Afternoon Pour-Over</option>
+                  <option value="04:30 PM">04:30 PM • Golden Hour Light</option>
+                  <option value="06:30 PM">06:30 PM • Twilight Ambiance</option>
+                </select>
+                <span class="ref-chevron">⌄</span>
+              </div>
+
+              <!-- No. of Guests Pill -->
+              <div class="ref-input-pill">
+                <svg class="ref-field-icon" viewBox="0 0 24 24">
+                  <path d="M12,4A4,4 0 0,1 16,8A4,4 0 0,1 12,12A4,4 0 0,1 8,8A4,4 0 0,1 12,4M12,14C16.42,14 20,15.79 20,18V20H4V18C4,15.79 7.58,14 12,14Z"/>
+                </svg>
+                <select id="resGuestsVal" class="ref-field">
+                  <option value="" disabled selected>No. of Guests</option>
+                  <option value="1 Guest">1 Guest</option>
+                  <option value="2 Guests">2 Guests</option>
+                  <option value="3 Guests">3 Guests</option>
+                  <option value="4 Guests">4 Guests</option>
+                  <option value="5+ Guests">5+ Guests (Party)</option>
+                </select>
+                <span class="ref-chevron">⌄</span>
+              </div>
+            </div>
+
+            <!-- Guest Name & Email -->
+            <div class="ref-companion-row">
+              <input type="text" id="resName" class="ref-mini-input" placeholder="Your Name" required>
+              <input type="email" id="resEmail" class="ref-mini-input" placeholder="Your Email" required>
+            </div>
+
+            <input type="hidden" id="resSeatingVal" value="Window Nook">
+
+            <!-- Book Now Button & Doodle Arrow -->
+            <div class="ref-button-wrap">
+              <button type="submit" class="ref-book-btn" id="bookSubmitBtn">
+                <span>Book Now</span>
+                <span class="btn-arrow">→</span>
+              </button>
+              
+              <!-- Hand-Drawn Doodle Arrow pointing to button -->
+              <svg class="ref-doodle-arrow" viewBox="0 0 44 32" fill="none" stroke="#5c3822" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M6 26 C 20 28, 34 20, 36 6"/>
+                <path d="M28 8 L 36 6 L 37 14"/>
+              </svg>
+            </div>
+
+          </form>
+
+        </div>
+
+      </div>
+
+      <!-- RIGHT: The Seamless 3D Miniature Cafe Video (Coffee Icon Toggle for Mobile) -->
+      <div class="ref-model-wrap">
+        <div class="ref-video-box">
+          <video 
+            id="cafeVideo" 
+            src="cafe.mp4" 
+            poster="cafe_thumb.jpg" 
+            muted 
+            loop 
+            playsinline 
+            preload="auto"
+          ></video>
+
+          <!-- Mobile Coffee Icon Video Toggle -->
+          <button class="mobile-coffee-toggle" id="mobileCoffeeToggle" type="button" aria-label="Toggle miniature cafe animation">
+            <span class="coffee-cup-icon-badge">
+              <svg viewBox="0 0 24 24" class="coffee-toggle-svg">
+                <path d="M2,21H20V19H2M20,8H18V5H20M20,3H4V13A4,4 0 0,0 8,17H14A4,4 0 0,0 18,13V10H20A2,2 0 0,0 22,8V5C22,3.89 21.1,3 20,3Z"/>
+              </svg>
+              <span class="coffee-steam-dot dot-1"></span>
+              <span class="coffee-steam-dot dot-2"></span>
+              <span class="coffee-steam-dot dot-3"></span>
+            </span>
+            <span class="coffee-toggle-label">Animate Cafe</span>
+          </button>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- =============================================================
+       7. REVIEWS & VISIT SECTION
+       ============================================================= -->
+  <section class="mobile-section" id="visit">
+    <div class="mobile-container">
+      <div class="section-badge">Guest Praise</div>
+      <h2 class="section-title">Words From Visitors</h2>
+
+      <!-- Horizontal Swipeable Review Cards -->
+      <div class="mobile-reviews-wrap">
+        <div class="review-bubble">
+          <div class="review-stars">★★★★★</div>
+          <p class="review-quote">"Stepping through felt like entering a Ghibli world. The pour-over is transcendent."</p>
+          <div class="reviewer-title">Elena Rostova</div>
+          <div class="reviewer-sub">The Daily Roast</div>
+        </div>
+
+        <div class="review-bubble">
+          <div class="review-stars">★★★★★</div>
+          <p class="review-quote">"The strawberry shortcake was feather-light, and the Ethiopian roast had peach notes."</p>
+          <div class="reviewer-title">Marcus Kim</div>
+          <div class="reviewer-sub">Artisan Coffee Guild</div>
+        </div>
+
+        <div class="review-bubble">
+          <div class="review-stars">★★★★★</div>
+          <p class="review-quote">"The sleeping clay cat on the roof tiles welcomed us. My favorite cafe in the city."</p>
+          <div class="reviewer-title">Sophia Chen</div>
+          <div class="reviewer-sub">Photographer</div>
+        </div>
+      </div>
+
+      <!-- Quick Action Buttons -->
+      <div class="visit-quick-buttons">
+        <button class="btn-action-card" onclick="copyAddress()">
+          <svg viewBox="0 0 24 24"><path d="M19,21H8V7H19M19,5H8A2,2 0 0,0 6,7V21A2,2 0 0,0 8,23H19A2,2 0 0,0 21,21V7A2,2 0 0,0 19,5M16,1H4A2,2 0 0,0 2,3V17H4V3H16V1Z"/></svg>
+          <span>Copy Address</span>
+        </button>
+
+        <a href="tel:+15557428323" class="btn-action-card">
+          <svg viewBox="0 0 24 24"><path d="M6.62,10.79C8.06,13.62 10.38,15.94 13.21,17.38L15.41,15.18C15.69,14.9 16.08,14.82 16.43,14.93C17.55,15.3 18.75,15.5 20,15.5A1,1 0 0,1 21,16.5V20A1,1 0 0,1 20,21A17,17 0 0,1 3,4A1,1 0 0,1 4,3H7.5A1,1 0 0,1 8.5,4C8.5,5.25 8.7,6.45 9.07,7.57C9.18,7.92 9.1,8.31 8.82,8.59L6.62,10.79Z"/></svg>
+          <span>Call Cafe</span>
+        </a>
+      </div>
+
+      <!-- Operating Hours Sheet -->
+      <div class="hours-sheet">
+        <h4 style="font-family: var(--font-display); font-size: 1rem; color: var(--amber); margin-bottom: 8px;">Opening Hours</h4>
+        <div class="hours-row today"><span>Today</span><span>8:00 AM – 8:00 PM</span></div>
+        <div class="hours-row"><span>Monday – Thursday</span><span>8:00 AM – 7:00 PM</span></div>
+        <div class="hours-row"><span>Friday – Saturday</span><span>8:00 AM – 9:00 PM</span></div>
+        <div class="hours-row"><span>Sunday</span><span>9:00 AM – 6:00 PM</span></div>
+      </div>
+
+      <footer class="mobile-footer">
+        <p>© 2026 Le Petit Café • Handcrafted Miniature World</p>
+        <p style="margin-top: 4px;">Designed with passion for coffee lovers worldwide.</p>
+      </footer>
+    </div>
+  </section>
+
+  <!-- =============================================================
+       MODAL: RESERVATION CONFIRMATION BOTTOM SHEET
+       ============================================================= -->
+  <div class="modal-backdrop" id="resModal">
+    <div class="modal-sheet">
+      <div class="modal-check-icon">
+        <svg viewBox="0 0 24 24"><path d="M21,7L9,19L3.5,13.5L4.91,12.09L9,16.17L19.59,5.59L21,7Z"/></svg>
+      </div>
+      <h3 style="font-family: var(--font-display); font-size: 1.4rem; color: var(--text-main); margin-bottom: 8px;">Table Reserved!</h3>
+      <p style="font-size: 0.88rem; color: var(--text-muted); line-height: 1.5; margin-bottom: 20px;" id="modalText">
+        Thank you. We have saved your table and dispatched your confirmation.
+      </p>
+      <button class="btn-gold" onclick="closeModal()" style="width: 100%; padding: 12px;">See You Soon</button>
+    </div>
+  </div>
+
+  <!-- Mobile Toast -->
+  <div id="mobileToast">Item added!</div>
+
+  <!-- =============================================================
+       INLINE JAVASCRIPT: FRAME ENGINE & MOBILE INTERACTIONS
+       ============================================================= -->
+  <script>
+    (function() {
+      'use strict';
+
+      /* --- CONFIG --- */
+      const TOTAL_FRAMES = 240;
+      const LERP_FACTOR = 0.12;
+      
+      const CANDIDATE_BASE_PATHS = [
+        './Camera_entering_miniature_cozy_cafe_20261014113843_frames/Camera_entering_miniature_cozy_cafe_20261014113843_frames/',
+        './Camera_entering_miniature_cozy_cafe_20261014113843_frames/',
+        './frames/',
+        './'
+      ];
+
+      /* --- DOM ELEMENTS --- */
+      const experienceSec = document.getElementById('experience');
+      const canvas = document.getElementById('frameCanvas');
+      const ctx = canvas.getContext('2d', { alpha: false });
+      const progressStrip = document.getElementById('progress-strip');
+      const hudFrame = document.getElementById('hudFrame');
+      const scrollPrompt = document.getElementById('scroll-prompt');
+      const autoTourBtn = document.getElementById('autoTourBtn');
+      const tourPlayIcon = document.getElementById('tourPlayIcon');
+      const soundBtn = document.getElementById('soundBtn');
+      const preloader = document.getElementById('preloader');
+      const loaderBar = document.getElementById('loaderBar');
+      const loaderStatusText = document.getElementById('loaderStatusText');
+      const scrubberTrack = document.getElementById('scrubberTrack');
+      const scrubberFill = document.getElementById('scrubberFill');
+      const scrubberHandle = document.getElementById('scrubberHandle');
+      const storyCards = document.querySelectorAll('.story-card');
+      const chapterChips = document.querySelectorAll('.chapter-chip');
+      const navTabs = document.querySelectorAll('.nav-tab-btn');
+      const menuList = document.getElementById('menuList');
+      const resModal = document.getElementById('resModal');
+      const toast = document.getElementById('mobileToast');
+
+      /* --- STATE --- */
+      let detectedBasePath = null;
+      const images = new Array(TOTAL_FRAMES + 1);
+      const loadedMap = new Uint8Array(TOTAL_FRAMES + 1);
+      let loadedCount = 0;
+      let targetFrame = 1;
+      let renderedFrame = 1;
+      let isAutoPlaying = false;
+      let autoPlayRAF = null;
+      let isDraggingScrubber = false;
+      let autoTourProgress = 0;
+
+      const PLAY_PATH = 'M8,5.14V19.14L19,12.14L8,5.14Z';
+      const PAUSE_PATH = 'M14,19H18V5H14M6,19H10V5H6V19Z';
+
+      function pad(num, size) {
+        let s = num + "";
+        while (s.length < size) s = "0" + s;
+        return s;
+      }
+
+      function getFrameFileName(index) {
+        return `frame_${pad(index, 3)}.png`;
+      }
+
+      /* --- AUTO-DETECT FRAME PATH --- */
+      function detectBasePath() {
+        return new Promise((resolve) => {
+          let testIdx = 0;
+          function tryNext() {
+            if (testIdx >= CANDIDATE_BASE_PATHS.length) {
+              resolve(CANDIDATE_BASE_PATHS[0]);
+              return;
+            }
+            const candidate = CANDIDATE_BASE_PATHS[testIdx];
+            const testImg = new Image();
+            testImg.onload = () => resolve(candidate);
+            testImg.onerror = () => {
+              testIdx++;
+              tryNext();
+            };
+            testImg.src = candidate + getFrameFileName(1);
+          }
+          tryNext();
+        });
+      }
+
+      /* --- HIGH-DPI CANVAS RENDERING (MOBILE-OPTIMIZED COVER) --- */
+      function renderCanvas(frameIdx) {
+        const roundedIdx = Math.max(1, Math.min(TOTAL_FRAMES, Math.round(frameIdx)));
+        let img = images[roundedIdx];
+
+        if (!img || !loadedMap[roundedIdx]) {
+          img = getNearestLoadedImage(roundedIdx);
+        }
+        if (!img) return;
+
+        const cw = canvas.width;
+        const ch = canvas.height;
+        const iw = img.naturalWidth || img.width || 1280;
+        const ih = img.naturalHeight || img.height || 720;
+
+        // Cover formula centered
+        const hRatio = cw / iw;
+        const vRatio = ch / ih;
+        const scale = Math.max(hRatio, vRatio);
+
+        const renderW = iw * scale;
+        const renderH = ih * scale;
+        const offsetX = (cw - renderW) * 0.5;
+        const offsetY = (ch - renderH) * 0.5;
+
+        ctx.drawImage(img, offsetX, offsetY, renderW, renderH);
+
+        if (hudFrame) hudFrame.textContent = pad(roundedIdx, 3);
+      }
+
+      function getNearestLoadedImage(target) {
+        if (loadedCount === 0) return null;
+        if (loadedMap[target] && images[target]) return images[target];
+
+        // Radiate outward from target for instant match to closest loaded keyframe
+        for (let offset = 1; offset <= TOTAL_FRAMES; offset++) {
+          const down = target - offset;
+          if (down >= 1 && loadedMap[down] && images[down]) return images[down];
+          const up = target + offset;
+          if (up <= TOTAL_FRAMES && loadedMap[up] && images[up]) return images[up];
+        }
+        return null;
+      }
+
+      function resizeCanvas() {
+        const dpr = Math.min(window.devicePixelRatio || 1, 2);
+        canvas.width = window.innerWidth * dpr;
+        canvas.height = window.innerHeight * dpr;
+        renderCanvas(renderedFrame);
+      }
+
+      /* --- PRELOAD ENGINE --- */
+      async function startLoadingEngine(base) {
+        detectedBasePath = base;
+
+        await loadSingleImage(1);
+        renderCanvas(1);
+
+        // First 5 frames for instant start
+        await loadBatchConcurrently([2, 3, 4, 5], 4);
+        dismissPreloader();
+
+        // Sample keyframes (every 6th frame) for instant scrubbing
+        const keyframes = [];
+        for (let i = 6; i <= TOTAL_FRAMES; i += 6) {
+          if (!loadedMap[i]) keyframes.push(i);
+        }
+        await loadBatchConcurrently(keyframes, 6);
+
+        // Fill remaining
+        const remaining = [];
+        for (let i = 1; i <= TOTAL_FRAMES; i++) {
+          if (!loadedMap[i]) remaining.push(i);
+        }
+        loadBatchConcurrently(remaining, 6);
+      }
+
+      function loadSingleImage(index) {
+        return new Promise((resolve) => {
+          if (loadedMap[index] && images[index]) return resolve(images[index]);
+          const img = new Image();
+          img.onload = () => {
+            const finish = () => {
+              images[index] = img;
+              loadedMap[index] = 1;
+              loadedCount++;
+              onImageLoaded(index);
+              resolve(img);
+            };
+            if (typeof img.decode === 'function') {
+              img.decode().then(finish).catch(finish);
+            } else {
+              finish();
+            }
+          };
+          img.onerror = () => resolve(null);
+          img.src = detectedBasePath + getFrameFileName(index);
+        });
+      }
+
+      function loadBatchConcurrently(indices, concurrency) {
+        return new Promise((resolve) => {
+          if (!indices.length) return resolve();
+          let current = 0;
+          let running = 0;
+
+          function next() {
+            if (current >= indices.length && running === 0) return resolve();
+            while (running < concurrency && current < indices.length) {
+              const idx = indices[current++];
+              running++;
+              loadSingleImage(idx).then(() => {
+                running--;
+                next();
+              });
+            }
+          }
+          next();
+        });
+      }
+
+      function onImageLoaded(idx) {
+        const pct = Math.round((loadedCount / TOTAL_FRAMES) * 100);
+        if (loaderBar) loaderBar.style.width = pct + '%';
+        if (loaderStatusText && loadedCount < TOTAL_FRAMES) {
+          loaderStatusText.textContent = `Streaming frames (${pct}%)...`;
+        }
+        if (Math.round(renderedFrame) === idx) {
+          renderCanvas(idx);
+        }
+      }
+
+      function dismissPreloader() {
+        if (!preloader.classList.contains('loaded')) {
+          preloader.classList.add('loaded');
+          setTimeout(() => preloader.style.display = 'none', 650);
+        }
+      }
+
+      /* --- RENDER RAF LOOP --- */
+      function animationLoop() {
+        if (!isAutoPlaying) {
+          const diff = targetFrame - renderedFrame;
+          if (Math.abs(diff) > 0.001) {
+            renderedFrame += diff * LERP_FACTOR;
+            if (Math.abs(targetFrame - renderedFrame) < 0.01) {
+              renderedFrame = targetFrame;
+            }
+            renderCanvas(renderedFrame);
+          }
+        }
+        requestAnimationFrame(animationLoop);
+      }
+
+      /* --- TOUR SCROLL PROGRESS --- */
+      function getTourProgress() {
+        const rect = experienceSec.getBoundingClientRect();
+        const scrollDistance = experienceSec.offsetHeight - window.innerHeight;
+        if (scrollDistance <= 0) return 0;
+        const progress = -rect.top / scrollDistance;
+        return Math.max(0, Math.min(1, progress));
+      }
+
+      function onScroll() {
+        if (isDraggingScrubber || isAutoPlaying) return;
+
+        const progress = getTourProgress();
+
+        targetFrame = 1 + progress * (TOTAL_FRAMES - 1);
+        updateUIProgress(progress);
+
+        if (window.scrollY > 80) {
+          scrollPrompt.classList.add('hidden');
+        } else {
+          scrollPrompt.classList.remove('hidden');
+        }
+
+        updateBottomNavActive();
+      }
+
+      function updateUIProgress(progress) {
+        const pctString = Math.round(progress * 100) + '%';
+        if (progressStrip) progressStrip.style.width = pctString;
+        if (scrubberFill) scrubberFill.style.width = pctString;
+        if (scrubberHandle) scrubberHandle.style.left = pctString;
+
+        updateStoryCards(progress);
+        updateChapterChips(progress);
+      }
+
+      function updateStoryCards(p) {
+        let activeChapter = -1;
+        if (p >= 0 && p <= 0.18) activeChapter = 0;
+        else if (p >= 0.22 && p <= 0.46) activeChapter = 1;
+        else if (p >= 0.50 && p <= 0.74) activeChapter = 2;
+        else if (p >= 0.78 && p <= 0.94) activeChapter = 3;
+        else if (p >= 0.96 && p <= 1.0) activeChapter = 4;
+
+        storyCards.forEach((card) => {
+          const ch = parseInt(card.dataset.chapter, 10);
+          if (ch === activeChapter) {
+            card.classList.add('active');
+          } else {
+            card.classList.remove('active');
+          }
+        });
+      }
+
+      function updateChapterChips(p) {
+        chapterChips.forEach((chip) => {
+          const target = parseFloat(chip.dataset.target);
+          if (Math.abs(p - target) < 0.18) {
+            chip.classList.add('active');
+          } else {
+            chip.classList.remove('active');
+          }
+        });
+      }
+
+      window.scrollToTourProgress = function(p) {
+        if (isAutoPlaying) stopAutoPlay();
+        const scrollDistance = experienceSec.offsetHeight - window.innerHeight;
+        const targetScroll = experienceSec.offsetTop + p * scrollDistance;
+
+        targetFrame = 1 + p * (TOTAL_FRAMES - 1);
+        updateUIProgress(p);
+
+        window.scrollTo({
+          top: targetScroll,
+          behavior: 'smooth'
+        });
+      };
+
+      /* --- TIMELINE SCRUBBER --- */
+      function setupScrubber() {
+        function handleScrub(e) {
+          if (isAutoPlaying) stopAutoPlay();
+          const rect = scrubberTrack.getBoundingClientRect();
+          const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+          const pos = Math.max(0, Math.min(1, (clientX - rect.left) / rect.width));
+
+          const scrollDistance = experienceSec.offsetHeight - window.innerHeight;
+          const targetScroll = experienceSec.offsetTop + pos * scrollDistance;
+
+          window.scrollTo(0, targetScroll);
+          targetFrame = 1 + pos * (TOTAL_FRAMES - 1);
+          updateUIProgress(pos);
+        }
+
+        scrubberTrack.addEventListener('pointerdown', (e) => {
+          isDraggingScrubber = true;
+          handleScrub(e);
+          window.addEventListener('pointermove', handleScrub);
+          window.addEventListener('pointerup', onPointerUp);
+        });
+
+        function onPointerUp() {
+          isDraggingScrubber = false;
+          window.removeEventListener('pointermove', handleScrub);
+          window.removeEventListener('pointerup', onPointerUp);
+        }
+
+        chapterChips.forEach((chip) => {
+          chip.addEventListener('click', () => {
+            const t = parseFloat(chip.dataset.target);
+            scrollToTourProgress(t);
+          });
+        });
+      }
+
+      /* --- AUTO TOUR ENGINE (60+ FPS OPTIMIZED) --- */
+      window.toggleAutoPlay = function() {
+        if (isAutoPlaying) stopAutoPlay();
+        else startAutoPlay();
+      };
+
+      function startAutoPlay() {
+        if (isAutoPlaying) return;
+        isAutoPlaying = true;
+        autoTourBtn.classList.add('active');
+        const path = tourPlayIcon.querySelector('path');
+        if (path) path.setAttribute('d', PAUSE_PATH);
+        scrollPrompt.classList.add('hidden');
+
+        const currentProg = getTourProgress();
+        if (currentProg >= 0.98) {
+          autoTourProgress = 0;
+          targetFrame = 1;
+          renderedFrame = 1;
+          window.scrollTo(0, experienceSec.offsetTop);
+          updateUIProgress(0);
+          renderCanvas(1);
+        } else {
+          autoTourProgress = currentProg;
+        }
+
+        const TOUR_DURATION_MS = 14000; // 14 seconds for complete, silky-smooth 240 frames
+        let lastAutoTime = performance.now();
+        let lastScrollSyncTime = 0;
+
+        function autoStep(timestamp) {
+          if (!isAutoPlaying) return;
+
+          const now = timestamp || performance.now();
+          const dt = Math.min(now - lastAutoTime, 100); // Guard against background tab time skips
+          lastAutoTime = now;
+
+          autoTourProgress += dt / TOUR_DURATION_MS;
+
+          if (autoTourProgress >= 1) {
+            autoTourProgress = 1;
+            targetFrame = TOTAL_FRAMES;
+            renderedFrame = TOTAL_FRAMES;
+            renderCanvas(TOTAL_FRAMES);
+            updateUIProgress(1);
+            const scrollDistance = experienceSec.offsetHeight - window.innerHeight;
+            window.scrollTo(0, experienceSec.offsetTop + scrollDistance);
+            stopAutoPlay();
+            return;
+          }
+
+          // Direct render on RAF tick for maximum FPS without lerp lag or stutter
+          targetFrame = 1 + autoTourProgress * (TOTAL_FRAMES - 1);
+          renderedFrame = targetFrame;
+          renderCanvas(renderedFrame);
+          updateUIProgress(autoTourProgress);
+
+          // Synchronize page scroll at ~20Hz (every 50ms) to prevent layout thrashing
+          if (now - lastScrollSyncTime > 50) {
+            lastScrollSyncTime = now;
+            const scrollDistance = experienceSec.offsetHeight - window.innerHeight;
+            window.scrollTo(0, experienceSec.offsetTop + autoTourProgress * scrollDistance);
+          }
+
+          autoPlayRAF = requestAnimationFrame(autoStep);
+        }
+
+        autoPlayRAF = requestAnimationFrame(autoStep);
+      }
+
+      function stopAutoPlay() {
+        if (!isAutoPlaying) return;
+        isAutoPlaying = false;
+        autoTourBtn.classList.remove('active');
+        const path = tourPlayIcon.querySelector('path');
+        if (path) path.setAttribute('d', PLAY_PATH);
+        if (autoPlayRAF) {
+          cancelAnimationFrame(autoPlayRAF);
+          autoPlayRAF = null;
+        }
+
+        // Align page scroll smoothly to the stopped position
+        const scrollDistance = experienceSec.offsetHeight - window.innerHeight;
+        window.scrollTo(0, experienceSec.offsetTop + autoTourProgress * scrollDistance);
+        updateBottomNavActive();
+      }
+
+      autoTourBtn.addEventListener('click', toggleAutoPlay);
+
+      window.addEventListener('wheel', () => {
+        if (isAutoPlaying) stopAutoPlay();
+      }, { passive: true });
+
+      window.addEventListener('touchmove', () => {
+        if (isAutoPlaying) stopAutoPlay();
+      }, { passive: true });
+
+      /* --- AMBIENT SOUND GENERATOR (WEB AUDIO) --- */
+      let audioCtx = null;
+      let isSoundPlaying = false;
+      let soundNodes = [];
+
+      window.toggleSound = function() {
+        if (isSoundPlaying) stopSound();
+        else startSound();
+      };
+
+      function startSound() {
+        try {
+          const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+          if (!AudioContextClass) return;
+          if (!audioCtx) audioCtx = new AudioContextClass();
+          if (audioCtx.state === 'suspended') audioCtx.resume();
+
+          isSoundPlaying = true;
+          soundBtn.classList.add('active');
+
+          const masterGain = audioCtx.createGain();
+          masterGain.gain.setValueAtTime(0.01, audioCtx.currentTime);
+          masterGain.gain.exponentialRampToValueAtTime(0.16, audioCtx.currentTime + 1.5);
+          masterGain.connect(audioCtx.destination);
+          soundNodes.push(masterGain);
+
+          // Vinyl Crackle
+          const bufferSize = audioCtx.sampleRate * 2;
+          const noiseBuffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
+          const output = noiseBuffer.getChannelData(0);
+          for (let i = 0; i < bufferSize; i++) {
+            let val = (Math.random() * 2 - 1) * 0.04;
+            if (Math.random() < 0.0006) val += (Math.random() - 0.5) * 0.35;
+            output[i] = val;
+          }
+          const whiteNoise = audioCtx.createBufferSource();
+          whiteNoise.buffer = noiseBuffer;
+          whiteNoise.loop = true;
+
+          const vinylFilter = audioCtx.createBiquadFilter();
+          vinylFilter.type = 'bandpass';
+          vinylFilter.frequency.value = 1400;
+          vinylFilter.Q.value = 1.2;
+
+          whiteNoise.connect(vinylFilter);
+          vinylFilter.connect(masterGain);
+          whiteNoise.start();
+          soundNodes.push(whiteNoise);
+
+          // Warm chord drone (F Maj 9)
+          const chordFreqs = [174.61, 220.00, 261.63, 329.63, 392.00];
+          chordFreqs.forEach((freq, idx) => {
+            const osc = audioCtx.createOscillator();
+            const noteGain = audioCtx.createGain();
+            const filter = audioCtx.createBiquadFilter();
+
+            osc.type = 'triangle';
+            osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+            osc.detune.setValueAtTime((idx - 2) * 4, audioCtx.currentTime);
+
+            filter.type = 'lowpass';
+            filter.frequency.setValueAtTime(600, audioCtx.currentTime);
+            noteGain.gain.setValueAtTime(0.025, audioCtx.currentTime);
+
+            osc.connect(filter);
+            filter.connect(noteGain);
+            noteGain.connect(masterGain);
+
+            osc.start();
+            soundNodes.push(osc);
+          });
+        } catch (e) {
+          console.warn('Audio notice:', e);
+        }
+      }
+
+      function stopSound() {
+        isSoundPlaying = false;
+        soundBtn.classList.remove('active');
+        soundNodes.forEach((node) => {
+          try {
+            if (node.stop) node.stop();
+            if (node.disconnect) node.disconnect();
+          } catch (e) {}
+        });
+        soundNodes = [];
+      }
+
+      soundBtn.addEventListener('click', toggleSound);
+
+      /* --- MOBILE MENU DATABASE & TABS --- */
+      const MENU_DATA = {
+        espresso: [
+          {
+            name: "Velvet Flat White",
+            price: "$5.80",
+            desc: "Double ristretto with micro-foamed oat milk.",
+            tag: "Signature"
+          },
+          {
+            name: "Kyoto Cortado",
+            price: "$5.20",
+            desc: "Equal parts espresso and warm textured milk.",
+            tag: "Artisan"
+          },
+          {
+            name: "Amber Honey Latte",
+            price: "$6.50",
+            desc: "Wildflower raw honey, cinnamon, steamed milk.",
+            tag: "House Special"
+          },
+          {
+            name: "Micro-Lot Flight",
+            price: "$8.00",
+            desc: "Washed Ethiopian vs natural Costa Rican.",
+            tag: "Tasting Flight"
+          }
+        ],
+        pourover: [
+          {
+            name: "Ethiopian Yirgacheffe",
+            price: "$7.00",
+            desc: "Jasmine blossom, bergamot, and candied peach.",
+            tag: "Single Origin"
+          },
+          {
+            name: "18h Dutch Cold Drip",
+            price: "$7.50",
+            desc: "Drop-by-drop extraction. Cognac cacao finish.",
+            tag: "Signature"
+          },
+          {
+            name: "Panama Geisha Lot",
+            price: "$12.00",
+            desc: "Lemongrass, apricot blossom, floral honey tea.",
+            tag: "Rare Lot"
+          },
+          {
+            name: "Sparkling Coffee Tonic",
+            price: "$6.80",
+            desc: "Cold drip over craft yuzu tonic & crystal ice.",
+            tag: "Refreshing"
+          }
+        ],
+        patisserie: [
+          {
+            name: "Petite Strawberry Shortcake",
+            price: "$8.50",
+            desc: "Soft sponge, summer berries, French chantilly.",
+            tag: "House Special"
+          },
+          {
+            name: "Cardamom Cruffin",
+            price: "$5.50",
+            desc: "Flaky croissant pastry, cardamom sugar, custard.",
+            tag: "Fresh Baked"
+          },
+          {
+            name: "Matcha Basque Cake",
+            price: "$7.80",
+            desc: "Molten ceremonial Uji matcha center.",
+            tag: "Gluten-Free"
+          },
+          {
+            name: "Hazelnut Tartlet",
+            price: "$6.20",
+            desc: "Toasted hazelnuts, Valrhona chocolate ganache.",
+            tag: "Artisan"
+          }
+        ],
+        brunch: [
+          {
+            name: "Avocado & Yuzu Sourdough",
+            price: "$13.50",
+            desc: "Poached eggs, whipped ricotta, fermented chili.",
+            tag: "Vegetarian"
+          },
+          {
+            name: "Brioche French Toast",
+            price: "$14.00",
+            desc: "Caramelized banana, maple reduction, pecans.",
+            tag: "House Favorite"
+          },
+          {
+            name: "Smoked Salmon Tartine",
+            price: "$15.50",
+            desc: "Cured salmon, pickled shallots, caper cream.",
+            tag: "Chef's Pick"
+          },
+          {
+            name: "Wild Mushroom Toast",
+            price: "$14.50",
+            desc: "Maitake, thyme butter, pecorino, poached egg.",
+            tag: "Vegetarian"
+          }
+        ]
+      };
+
+      function renderMenu(cat) {
+        const items = MENU_DATA[cat] || [];
+        menuList.innerHTML = items.map(item => `
+          <div class="mobile-menu-item">
+            <div class="item-meta">
+              <div class="item-title-row">
+                <span class="item-title">${item.name}</span>
+                <span class="item-price">${item.price}</span>
+              </div>
+              <p class="item-desc">${item.desc}</p>
+              <div class="item-tag-list">
+                <span class="item-tag">${item.tag}</span>
+              </div>
+            </div>
+            <button class="btn-quick-add" onclick="triggerToast('Added ${item.name}!')" title="Add to Order">+</button>
+          </div>
+        `).join('');
+      }
+
+      document.querySelectorAll('.menu-chip-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          document.querySelectorAll('.menu-chip-btn').forEach(b => b.classList.remove('active'));
+          btn.classList.add('active');
+          renderMenu(btn.dataset.cat);
+        });
+      });
+
+      /* --- BOOKING VIDEO & MOBILE COFFEE ICON TOGGLE BEHAVIOR --- */
+      function setupBookingReferenceBehavior() {
+        const bookSubmitBtn = document.getElementById('bookSubmitBtn');
+        const cafeVideo = document.getElementById('cafeVideo');
+        const mobileToggle = document.getElementById('mobileCoffeeToggle');
+        const cupDoodleBtn = document.getElementById('cupDoodleToggle');
+
+        if (!cafeVideo) return;
+
+        // Ensure video is muted and initially paused
+        cafeVideo.muted = true;
+        cafeVideo.pause();
+
+        function syncCoffeeToggleState(isPlaying) {
+          const label = mobileToggle ? mobileToggle.querySelector('.coffee-toggle-label') : null;
+          const hint = cupDoodleBtn ? cupDoodleBtn.querySelector('.ref-cup-hint') : null;
+
+          if (isPlaying) {
+            if (mobileToggle) {
+              mobileToggle.classList.add('active');
+              if (label) label.textContent = 'Pause Cafe';
+            }
+            if (cupDoodleBtn) {
+              cupDoodleBtn.classList.add('active');
+              if (hint) hint.textContent = 'Playing';
+            }
+          } else {
+            if (mobileToggle) {
+              mobileToggle.classList.remove('active');
+              if (label) label.textContent = 'Animate Cafe';
+            }
+            if (cupDoodleBtn) {
+              cupDoodleBtn.classList.remove('active');
+              if (hint) hint.textContent = 'Tap to play';
+            }
+          }
+        }
+
+        function toggleCafeVideo(e) {
+          if (e) {
+            e.preventDefault();
+            e.stopPropagation();
+          }
+          if (cafeVideo.paused) {
+            cafeVideo.playbackRate = 1.0;
+            cafeVideo.play().then(() => {
+              syncCoffeeToggleState(true);
+              triggerToast('Miniature Cafe animating! ☕');
+            }).catch(() => {});
+          } else {
+            cafeVideo.pause();
+            syncCoffeeToggleState(false);
+            triggerToast('Cafe animation paused ☕');
+          }
+        }
+
+        // Mobile Coffee Icon Toggle Button click/touch
+        if (mobileToggle) {
+          mobileToggle.addEventListener('click', toggleCafeVideo);
+        }
+
+        // Card Header Coffee Cup Doodle Button click/touch
+        if (cupDoodleBtn) {
+          cupDoodleBtn.addEventListener('click', toggleCafeVideo);
+        }
+
+        // Keep desktop hover to play behavior on Book Now button
+        if (bookSubmitBtn) {
+          bookSubmitBtn.addEventListener('mouseenter', () => {
+            cafeVideo.playbackRate = 1.0;
+            cafeVideo.play().catch(() => {});
+          });
+
+          bookSubmitBtn.addEventListener('mouseleave', () => {
+            cafeVideo.pause();
+          });
+        }
+
+        // Sync toggle states with actual video playing / paused events
+        cafeVideo.addEventListener('play', () => syncCoffeeToggleState(true));
+        cafeVideo.addEventListener('pause', () => syncCoffeeToggleState(false));
+
+        // Seamless loop
+        cafeVideo.addEventListener('ended', () => {
+          cafeVideo.currentTime = 0;
+          cafeVideo.play().catch(() => {});
+        });
+      }
+
+      window.handleReservation = function(e) {
+        e.preventDefault();
+        const name = document.getElementById('resName').value;
+        const date = document.getElementById('resDate').value;
+        const time = document.getElementById('resTime').value;
+        const guests = document.getElementById('resGuestsVal').value;
+
+        // Play celebratory video spin
+        const cafeVideo = document.getElementById('cafeVideo');
+        if (cafeVideo) cafeVideo.play().catch(() => {});
+
+        document.getElementById('modalText').textContent = 
+          `Dear ${name}, your cozy table for ${guests} on ${date} at ${time} is reserved!`;
+        resModal.classList.add('open');
+      };
+
+      window.closeModal = function() {
+        resModal.classList.remove('open');
+        document.getElementById('resForm').reset();
+      };
+
+      /* --- TOAST & UTILS --- */
+      window.triggerToast = function(msg) {
+        toast.textContent = msg;
+        toast.classList.add('show');
+        setTimeout(() => toast.classList.remove('show'), 3000);
+      };
+
+      window.copyAddress = function() {
+        navigator.clipboard.writeText('14 Petit Promenade, Green Garden Quarter, Le Petit Café').then(() => {
+          triggerToast('Address copied! 📋');
+        });
+      };
+
+      /* --- NAV SCROLL TRACKING (MOBILE & DESKTOP) --- */
+      const desktopNavLinks = document.querySelectorAll('.desktop-nav-link');
+
+      function updateBottomNavActive() {
+        const sections = ['experience', 'philosophy', 'menu', 'reservations', 'visit'];
+        const scrollY = window.scrollY;
+
+        sections.forEach(id => {
+          const sec = document.getElementById(id);
+          if (!sec) return;
+          const top = sec.offsetTop - 180;
+          const bottom = top + sec.offsetHeight;
+          if (scrollY >= top && scrollY < bottom) {
+            navTabs.forEach(tab => {
+              if (tab.dataset.nav === id) tab.classList.add('active');
+              else tab.classList.remove('active');
+            });
+            desktopNavLinks.forEach(link => {
+              if (link.dataset.nav === id) link.classList.add('active');
+              else link.classList.remove('active');
+            });
+          }
+        });
+      }
+
+      /* --- INITIALIZE --- */
+      const tomorrow = new Date();
+      tomorrow.setDate(tomorrow.getDate() + 1);
+      const resDateInput = document.getElementById('resDate');
+      if (resDateInput) {
+        resDateInput.value = `${tomorrow.getFullYear()}-${String(tomorrow.getMonth() + 1).padStart(2, '0')}-${String(tomorrow.getDate()).padStart(2, '0')}`;
+      }
+
+      window.addEventListener('scroll', onScroll, { passive: true });
+      window.addEventListener('resize', resizeCanvas, { passive: true });
+
+      resizeCanvas();
+      setupScrubber();
+      setupBookingReferenceBehavior();
+      renderMenu('espresso');
+      requestAnimationFrame(animationLoop);
+
+      detectBasePath().then((basePath) => {
+        startLoadingEngine(basePath);
+      });
+
+    })();
+  </script>
+</body>
+</html>
