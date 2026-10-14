@@ -367,9 +367,40 @@
       display: flex;
       flex-direction: column;
       justify-content: center;
-      background: radial-gradient(circle at 75% 15%, #fffbf6 0%, #fbf5ee 45%, #f4ede3 100%);
+      background-color: #fbf5ee;
       overflow: hidden;
       border-bottom: 1px solid rgba(132, 85, 50, 0.15);
+    }
+
+    /* Hero Stock Photo Background Layer */
+    .hero-bg-media {
+      position: absolute;
+      inset: 0;
+      z-index: 1;
+      overflow: hidden;
+      pointer-events: none;
+    }
+
+    .hero-bg-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center 36%;
+      transform: scale(1.05);
+      filter: brightness(0.96) contrast(1.06) saturate(1.12);
+      transition: transform 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    /* Multi-stop Parchment & Espresso Gradient Scrim for Exceptional Contrast */
+    .hero-bg-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(
+        180deg,
+        rgba(251, 245, 238, 0.95) 0%,
+        rgba(251, 245, 238, 0.88) 50%,
+        rgba(244, 232, 218, 0.92) 100%
+      );
     }
 
     /* Ambient Warm Glow Orbs in Background */
@@ -378,8 +409,8 @@
       border-radius: 50%;
       filter: blur(80px);
       pointer-events: none;
-      opacity: 0.45;
-      z-index: 1;
+      opacity: 0.35;
+      z-index: 2;
     }
     .hero-glow-1 {
       top: -80px;
@@ -2040,6 +2071,16 @@
         padding: 130px 48px 70px;
       }
 
+      .hero-bg-overlay {
+        background: linear-gradient(
+          to right,
+          rgba(251, 245, 238, 0.96) 0%,
+          rgba(251, 245, 238, 0.90) 48%,
+          rgba(251, 245, 238, 0.72) 75%,
+          rgba(242, 228, 212, 0.86) 100%
+        );
+      }
+
       .hero-container {
         display: grid;
         grid-template-columns: 1.12fr 0.88fr;
@@ -2247,6 +2288,12 @@
        3. GENERIC HERO SECTION (STOCK CAFE VIDEO & IMAGERY)
        ============================================================= -->
   <section id="experience" class="hero-section">
+    <!-- Ambient Stock Cafe Image Background with Artistic Warm Scrim -->
+    <div class="hero-bg-media" aria-hidden="true">
+      <img src="https://images.unsplash.com/photo-1554118811-1e0d58224f24?auto=format&fit=crop&w=2000&q=85" alt="Cozy Cafe Ambient Interior" class="hero-bg-img" loading="eager">
+      <div class="hero-bg-overlay"></div>
+    </div>
+
     <!-- Ambient Warm Orbs -->
     <div class="hero-backdrop-glow hero-glow-1"></div>
     <div class="hero-backdrop-glow hero-glow-2"></div>
